@@ -4,15 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>MindFull — Kamu Tidak Sendiri</title>
-<!--
-  MindFull · PIK-R Mental Health Platform Prototype
-  Single-file HTML. No backend. No login. Mock data only.
-
-  DESIGN DIRECTION: "Soft Sanctuary"
-  A calm, warm, deeply human interface using organic shapes,
-  gentle gradients, and generous whitespace. The goal is to
-  feel like a safe journal page — never clinical or cold.
--->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
@@ -148,14 +139,6 @@ section{padding:88px 0}
 .nav-links a{padding:7px 14px;border-radius:var(--r-pill);font-size:14px;font-weight:600;color:var(--muted);transition:all .2s}
 .nav-links a:hover{color:var(--pri);background:#EEF2FF}
 .nav-btn{display:flex;gap:8px;align-items:center}
-.mob-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--card);
-  border-bottom:1px solid var(--border);padding:16px 24px;z-index:99;
-  flex-direction:column;gap:4px;box-shadow:var(--sh-m)}
-.mob-menu.op{display:flex}
-.mob-menu a{padding:12px 16px;border-radius:var(--r-s);font-size:15px;font-weight:600;color:var(--ink2);transition:all .2s}
-.mob-menu a:hover{color:var(--pri);background:#EEF2FF}
-.mob-bts{display:flex;gap:8px;margin-top:8px;padding-top:12px;border-top:1px solid var(--border)}
-
 /* ─────────────────────────────────────────
    HERO SECTION
    Organic shapes + warm gradient mesh.
@@ -414,26 +397,12 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
    RESPONSIVE
 ───────────────────────────────────────── */
 @media(max-width:900px){
-  .hbg{
-    display:none;
-  }
-  .nav-links{
-    display:flex;
-    gap:4px;
-  }
-  .nav-links a{
-    padding:6px 10px;
-    font-size:13px;
-  }
-  .nav-btn{
-    display:none;
-  }
-  .h-inner{
-    grid-template-columns:1fr;
-  }
-  .h-vis{
-    display: none;
-  }
+  .h-inner,.checkin-grid,.anon-grid{grid-template-columns:1fr}
+  .h-vis{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .res-grid{grid-template-columns:1fr 1fr}
+  .ft-top{grid-template-columns:1fr 1fr}
+  .nav-links,.nav-btn{display:none}
 }
 @media(max-width:580px){
   section{padding:60px 0}
@@ -446,19 +415,39 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
   .cat-grid{grid-template-columns:repeat(2,1fr)}
   .h-cta{flex-direction:column}
   .h-cta .btn{width:100%;justify-content:center}
-  .nav-links{
-    overflow-x:auto;
-    scrollbar-width:none;
-    -ms-overflow-style:none;
-  .hero-h{
-        font-size:3rem;
-        line-height:1.05;
-    }
-  }
 }
-.nav-links::-webkit-scrollbar{
+/* MOBILE BOTTOM NAV */
+
+.bottom-nav{
     display:none;
 }
+
+@media(max-width:900px){
+
+    .bottom-nav{
+        display:flex;
+
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        height:64px;
+        background:#FFFFFF;
+        border-top:1px solid #E2E8F0;
+        z-index:999;
+        justify-content:space-around;
+        align-items:center;
+    }
+
+    .bottom-nav a{
+        text-decoration:none;
+        font-size:13px;
+        font-weight:600;
+        color:#64748B;
+    }
+    body{
+        padding-bottom:70px;
+    }
 }
 </style>
 </head>
@@ -482,9 +471,19 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
     <div class="nav-btn">
       <a href="#anon" class="btn btn-p btn-sm">Cerita Sekarang</a>
     </div>
+    <button class="hbg" id="hbg" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 <div class="mob-menu" id="mob-menu" aria-hidden="true">
+  <a href="#checkin" onclick="closeMenu()">😊 Daily Check-In</a>
+  <a href="#anon" onclick="closeMenu()">💬 Ceritakan</a>
+  <a href="#modresp" onclick="closeMenu()">🛡 Moderator</a>
+  <a href="#resources" onclick="closeMenu()">📚 Sumber Daya</a>
+  <div class="mob-bts">
+    <a href="#anon" class="btn btn-p btn-sm" onclick="closeMenu()">Mulai Cerita</a>
+  </div>
 </div>
 
 <!-- ╔══════════════════════════════
@@ -1262,6 +1261,14 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMoodBars();
   renderResources();
 });
+
+<nav class="bottom-nav">
+  <a href="#checkin">Check-In</a>
+  <a href="#anon">Ceritakan</a>
+  <a href="#modresp">Moderator</a>
+  <a href="#resources">Sumber</a>
+</nav>
+
 </script>
 </body>
 </html>
