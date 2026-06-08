@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ─────────────────────────────────────────
    TOKENS
@@ -54,7 +57,9 @@
 /* ─── RESET ─── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;font-size:16px}
-body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{
+    font-family:"Plus Jakarta Sans",sans-serif;
+}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;font-family:var(--fb);border:none;background:none}
 input,textarea,select{font-family:var(--fb)}
@@ -586,7 +591,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
     <div class="checkin-grid">
       <!-- Mood picker form -->
       <div class="mood-picker rev d1">
-        <h3>Pilih Mood Kamu 🌡</h3>
+        <h2>
+  Pilih Mood Kamu
+  <i data-lucide="activity"></i>
+</h2>
         <p>Klik yang paling mendekati perasaanmu sekarang.</p>
         <div class="moods" role="group" aria-label="Pilih mood">
           <!--
@@ -626,18 +634,13 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 
       <!-- Community mood stats -->
       <div class="mood-stats rev d2">
-        <h3>Mood Komunitas Hari Ini 📊</h3>
+        <h3>Mood Komunitas Hari Ini <i data-lucide="chart-column"></i></h3>
         <p>Kamu tidak sendiri — lihat bagaimana perasaan teman-temanmu.</p>
-        <!--
-          FUTURE: GET /api/checkin/stats?date=today
-          Returns aggregated mood percentages (not individual data).
-          Update every hour. Cache on CDN for performance.
-        -->
         <div class="mood-bars" id="mood-bars">
           <!-- Populated by JS -->
         </div>
         <div class="today-note" id="community-note">
-          💙 <strong>127 siswa</strong> sudah check-in hari ini.
+          <i data-lucide="users"></i> <strong>127 siswa</strong> sudah check-in hari ini.
           Mayoritas merasa cukup baik. Ingat: wajar untuk merasa tidak selalu sempurna!
         </div>
       </div>
@@ -668,27 +671,27 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
           <div class="cat-grid" role="radiogroup" aria-label="Pilih topik">
             <div class="cat-opt">
               <input type="radio" name="story-cat" id="c1" value="tekanan"/>
-              <label for="c1"><span class="ci">😤</span>Tekanan Belajar</label>
+              <label for="c1"><span class="ci"><i data-lucide="book-open"></i></span>Tekanan Belajar</label>
             </div>
             <div class="cat-opt">
               <input type="radio" name="story-cat" id="c2" value="hubungan"/>
-              <label for="c2"><span class="ci">💔</span>Hubungan</label>
+              <label for="c2"><span class="ci"><i data-lucide="heart"></i></span>Hubungan</label>
             </div>
             <div class="cat-opt">
               <input type="radio" name="story-cat" id="c3" value="keluarga"/>
-              <label for="c3"><span class="ci">🏠</span>Keluarga</label>
+              <label for="c3"><span class="ci"><i data-lucide="home"></i></span>Keluarga</label>
             </div>
             <div class="cat-opt">
               <input type="radio" name="story-cat" id="c4" value="masa-depan"/>
-              <label for="c4"><span class="ci">🔮</span>Masa Depan</label>
+              <label for="c4"><span class="ci"><i data-lucide="target"></i></span>Masa Depan</label>
             </div>
             <div class="cat-opt">
               <input type="radio" name="story-cat" id="c5" value="kesepian"/>
-              <label for="c5"><span class="ci">🌧</span>Kesepian</label>
+              <label for="c5"><span class="ci"><i data-lucide="moon"></i></span>Kesepian</label>
             </div>
             <div class="cat-opt">
               <input type="radio" name="story-cat" id="c6" value="lainnya"/>
-              <label for="c6"><span class="ci">💭</span>Lainnya</label>
+              <label for="c6"><span class="ci"><i data-lucide="ellipsis"></i></span>Lainnya</label>
             </div>
           </div>
         </div>
@@ -719,7 +722,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
         </div>
 
         <div class="priv-note">
-          <span class="pi">🔒</span>
+          <span class="pi"><i data-lucide="shield-check"> </i></span>
           <span>Ceritamu <strong>100% anonim</strong>. Nama, sekolah, atau identitas apapun tidak diperlukan. Moderator hanya dapat membaca konten cerita, bukan siapa yang menulis.</span>
         </div>
 
@@ -765,7 +768,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
         </div>
 
         <div class="crisis-box">
-          <h4>🆘 Butuh Bantuan Segera?</h4>
+          <h4><i data-lucide="triangle-alert"></i>
+Butuh Bantuan Segera?</h4>
           <p>Jika kamu merasa dalam bahaya atau butuh bicara dengan seseorang sekarang, jangan tunggu.</p>
           <!--
             FUTURE: Detect crisis keywords in story text (e.g., "bunuh diri", "menyakiti diri")
