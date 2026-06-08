@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MindFull — Kamu Tidak Sendiri</title>
+<!--
+  MindFull · PIK-R Mental Health Platform Prototype
+  Single-file HTML. No backend. No login. Mock data only.
+
+  DESIGN DIRECTION: "Soft Sanctuary"
+  A calm, warm, deeply human interface using organic shapes,
+  gentle gradients, and generous whitespace. The goal is to
+  feel like a safe journal page — never clinical or cold.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+   Central source of truth for all colours,
+   type, spacing. Dark mode ready — just add
+   @media (prefers-color-scheme: dark) overrides.
+───────────────────────────────────────── */
+:root{
+  --pri:#4F46E5;  --pri-d:#3730A3; --pri-l:#C7D2FE;
+  --sec:#06B6D4;  --sec-l:#CFFAFE;
+  --acc:#22C55E;  --acc-l:#DCFCE7;
+  --warn:#F59E0B;
+  --rose:#FB7185; --rose-l:#FFE4E6;
+  --violet:#A78BFA; --violet-l:#EDE9FE;
+  --peach:#FDBA74; --peach-l:#FEF3C7;
+
+  --bg:#F8FAFC;
+  --card:#FFFFFF;
+  --card2:#F1F5F9;
+  --border:#E2E8F0;
+  --border2:#CBD5E1;
+
+  --ink:#0F172A;
+  --ink2:#334155;
+  --muted:#64748B;
+  --faint:#94A3B8;
+  --ghost:#E2E8F0;
+
+  --fd:'DM Serif Display',Georgia,serif;
+  --fb:'Nunito',system-ui,sans-serif;
+
+  --r-s:10px; --r-m:18px; --r-l:26px; --r-xl:36px; --r-pill:999px;
+
+  --sh-xs:0 1px 4px rgba(15,23,42,.06);
+  --sh-s:0 4px 14px rgba(15,23,42,.07);
+  --sh-m:0 10px 32px rgba(15,23,42,.09);
+  --sh-l:0 24px 60px rgba(15,23,42,.12);
+  --sh-p:0 6px 24px rgba(79,70,229,.28);
+  --sh-acc:0 6px 24px rgba(34,197,94,.28);
+
+  --ease:cubic-bezier(.4,0,.2,1);
+  --spring:cubic-bezier(.34,1.56,.64,1);
+}
+
+/* ─── RESET ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--fb);background:var(--bg);color:var(--ink);line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:var(--fb);border:none;background:none}
+input,textarea,select{font-family:var(--fb)}
+img{display:block;max-width:100%}
+
+/* ─── LAYOUT ─── */
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+section{padding:88px 0}
+
+/* ─── SCROLL REVEAL ───
+   IntersectionObserver adds .in when element enters viewport.
+   CSS handles the transition. No library needed. */
+.rev{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.rev.in{opacity:1;transform:none}
+.rev.d1{transition-delay:.1s}.rev.d2{transition-delay:.2s}
+.rev.d3{transition-delay:.3s}.rev.d4{transition-delay:.4s}
+
+/* ─── TYPOGRAPHY ─── */
+.hero-h{font-family:var(--fd);font-size:clamp(40px,6vw,76px);font-weight:400;line-height:1.08;letter-spacing:-.01em}
+.hero-h em{font-style:italic;color:var(--pri)}
+.sec-h{font-family:var(--fd);font-size:clamp(26px,3.5vw,40px);font-weight:400;line-height:1.2;color:var(--ink)}
+.sec-h em{font-style:italic;color:var(--pri)}
+.label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--pri);opacity:.85}
+
+/* ─── BUTTONS ─── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 26px;border-radius:var(--r-pill);font-size:15px;font-weight:700;transition:all .25s var(--ease);white-space:nowrap;cursor:pointer;border:none}
+.btn-p{background:var(--pri);color:#fff;box-shadow:var(--sh-p)}
+.btn-p:hover{background:var(--pri-d);transform:translateY(-2px);box-shadow:0 10px 32px rgba(79,70,229,.38)}
+.btn-p:active{transform:none}
+.btn-o{background:transparent;color:var(--pri);border:2px solid var(--pri)}
+.btn-o:hover{background:#EEF2FF}
+.btn-g{background:transparent;color:var(--ink2);border:2px solid var(--border2)}
+.btn-g:hover{border-color:var(--pri);color:var(--pri);background:#EEF2FF}
+.btn-a{background:var(--acc);color:#fff;box-shadow:var(--sh-acc)}
+.btn-a:hover{background:#16A34A;transform:translateY(-2px)}
+.btn-sm{padding:9px 18px;font-size:13px}
+
+/* ─── BADGES ─── */
+.tag{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:var(--r-pill);font-size:12px;font-weight:700}
+.tag-p{background:#EEF2FF;color:var(--pri)}
+.tag-s{background:var(--sec-l);color:#0891B2}
+.tag-a{background:var(--acc-l);color:#16A34A}
+.tag-r{background:var(--rose-l);color:#E11D48}
+.tag-v{background:var(--violet-l);color:#7C3AED}
+
+/* ─── FORM ELEMENTS ─── */
+.fg{margin-bottom:16px}
+.fl{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:6px}
+.fi,.fta{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--r-m);font-size:14px;color:var(--ink);background:var(--card);transition:border-color .2s,box-shadow .2s;outline:none}
+.fi:focus,.fta:focus{border-color:var(--pri);box-shadow:0 0 0 4px rgba(79,70,229,.10)}
+.fi::placeholder,.fta::placeholder{color:var(--faint)}
+.fta{resize:vertical;min-height:120px;line-height:1.6}
+
+/* ─── CARDS ─── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-l);box-shadow:var(--sh-s)}
+.card-pad{padding:28px 32px}
+
+/* ─── SECTION HEADER ─── */
+.sh{margin-bottom:48px}
+.sh .label{display:block;margin-bottom:10px}
+.sh p{font-size:16px;color:var(--muted);max-width:520px;margin-top:12px;line-height:1.7}
+
+/* ─────────────────────────────────────────
+   NAVIGATION
+───────────────────────────────────────── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:100;height:64px;
+  background:rgba(248,250,252,.88);backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s,box-shadow .3s}
+#nav.sc{border-color:var(--border);box-shadow:var(--sh-xs)}
+.nav-in{height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--fd);font-size:20px;color:var(--pri)}
+.logo-mk{width:36px;height:36px;border-radius:12px;
+  background:linear-gradient(135deg,var(--pri),var(--sec));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;
+  box-shadow:0 4px 12px rgba(79,70,229,.3);
+  transition:transform .3s var(--spring)}
+.logo:hover .logo-mk{transform:rotate(-10deg) scale(1.1)}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{padding:7px 14px;border-radius:var(--r-pill);font-size:14px;font-weight:600;color:var(--muted);transition:all .2s}
+.nav-links a:hover{color:var(--pri);background:#EEF2FF}
+.nav-btn{display:flex;gap:8px;align-items:center}
+.mob-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(--card);
+  border-bottom:1px solid var(--border);padding:16px 24px;z-index:99;
+  flex-direction:column;gap:4px;box-shadow:var(--sh-m)}
+.mob-menu.op{display:flex}
+.mob-menu a{padding:12px 16px;border-radius:var(--r-s);font-size:15px;font-weight:600;color:var(--ink2);transition:all .2s}
+.mob-menu a:hover{color:var(--pri);background:#EEF2FF}
+.mob-bts{display:flex;gap:8px;margin-top:8px;padding-top:12px;border-top:1px solid var(--border)}
+
+/* ─────────────────────────────────────────
+   HERO SECTION
+   Organic shapes + warm gradient mesh.
+   The blob shapes are SVG-free CSS border-radius tricks.
+───────────────────────────────────────── */
+#hero{min-height:100vh;padding-top:64px;position:relative;overflow:hidden;display:flex;align-items:center}
+.h-mesh{position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 70% 60% at 5% 15%,rgba(79,70,229,.07) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 50% at 95% 80%,rgba(6,182,212,.06) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 40% at 50% 105%,rgba(34,197,94,.05) 0%,transparent 60%),
+    var(--bg)}
+/* Floating blobs */
+.blob{position:absolute;pointer-events:none;opacity:.7;animation:drift 12s ease-in-out infinite}
+.blob-1{width:340px;height:340px;top:-60px;right:-40px;
+  background:radial-gradient(circle,rgba(167,139,250,.18),rgba(6,182,212,.10));
+  border-radius:60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation-duration:14s}
+.blob-2{width:220px;height:220px;bottom:10%;left:-30px;
+  background:radial-gradient(circle,rgba(251,113,133,.12),rgba(253,186,116,.08));
+  border-radius:40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation-duration:11s;animation-delay:2s}
+.blob-3{width:160px;height:160px;top:40%;right:12%;
+  background:radial-gradient(circle,rgba(34,197,94,.14),rgba(6,182,212,.08));
+  border-radius:30% 70% 50% 50% / 50% 30% 70% 50%;
+  animation-duration:9s;animation-delay:1s}
+@keyframes drift{
+  0%,100%{transform:translate(0,0) rotate(0deg) scale(1)}
+  33%{transform:translate(12px,-18px) rotate(4deg) scale(1.03)}
+  66%{transform:translate(-8px,10px) rotate(-3deg) scale(.98)}
+}
+.h-inner{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;padding:80px 0 60px}
+.h-pill{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:var(--r-pill);
+  background:#EEF2FF;border:1px solid rgba(79,70,229,.2);
+  font-size:13px;font-weight:700;color:var(--pri);margin-bottom:22px}
+.h-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 2.2s ease infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+.h-sub{font-size:17px;color:var(--muted);line-height:1.8;max-width:460px;margin:18px 0 36px}
+.h-cta{display:flex;gap:12px;flex-wrap:wrap}
+/* Reassurance strip */
+.h-safe{display:flex;align-items:center;gap:10px;margin-top:40px;
+  padding:12px 18px;border-radius:var(--r-l);
+  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);
+  font-size:13px;color:#166534;font-weight:600;width:fit-content}
+/* Hero visual: floating mood cards */
+.h-vis{position:relative;height:420px}
+.float-card{position:absolute;background:var(--card);border-radius:var(--r-l);box-shadow:var(--sh-m);padding:20px;border:1px solid var(--border);animation:float 8s ease-in-out infinite}
+.fc-main{width:280px;top:50%;left:50%;transform:translate(-52%,-50%);z-index:3;animation-duration:8s}
+.fc-a{width:200px;top:8%;right:0;z-index:2;animation-duration:10s;animation-delay:1s}
+.fc-b{width:185px;bottom:8%;left:2%;z-index:2;animation-duration:9s;animation-delay:2.5s}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translateY(-14px)}}
+.fc-main{animation:floatC 8s ease-in-out infinite}
+@keyframes floatC{0%,100%{transform:translate(-52%,-50%) translateY(0)}50%{transform:translate(-52%,-50%) translateY(-14px)}}
+.fc-a{animation:floatA 10s ease-in-out infinite 1s}
+@keyframes floatA{0%,100%{transform:translateY(0) rotate(3deg)}50%{transform:translateY(-10px) rotate(5deg)}}
+.fc-b{animation:floatB 9s ease-in-out infinite 2.5s}
+@keyframes floatB{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(8px) rotate(-6deg)}}
+.fc-emoji{font-size:30px;margin-bottom:8px}
+.fc-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:5px}
+.fc-text{font-size:13px;font-weight:600;line-height:1.5;color:var(--ink)}
+.fc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+.fc-av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--pri),var(--sec));display:flex;align-items:center;justify-content:center;color:#fff;font-size:9px;font-weight:800}
+
+/* ─────────────────────────────────────────
+   DAILY CHECK-IN SECTION
+   FUTURE:
+   · POST /api/checkin { mood, userId/sessionId }
+   · Aggregate stats from DB for the bar chart
+   · Trend analysis: show user's mood history
+   · Threshold alerts: if "sangat buruk" 3 days
+     running, proactively offer moderator chat
+───────────────────────────────────────── */
+#checkin{background:var(--card)}
+.checkin-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.mood-picker h3{font-family:var(--fd);font-size:22px;margin-bottom:6px}
+.mood-picker > p{font-size:14px;color:var(--muted);margin-bottom:28px}
+.moods{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.mood-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 16px;
+  border-radius:var(--r-l);border:2px solid var(--border);background:var(--card);
+  cursor:pointer;transition:all .25s var(--spring);min-width:76px;font-size:13px;font-weight:700;color:var(--muted)}
+.mood-btn .me{font-size:28px;transition:transform .25s var(--spring)}
+.mood-btn:hover{border-color:var(--pri);color:var(--pri);transform:translateY(-3px)}
+.mood-btn:hover .me{transform:scale(1.2)}
+.mood-btn.sel{border-color:var(--pri);background:#EEF2FF;color:var(--pri);box-shadow:0 0 0 4px rgba(79,70,229,.1);transform:translateY(-3px)}
+.mood-btn.sel .me{transform:scale(1.2)}
+.mood-note{margin-bottom:20px}
+/* Community mood stats */
+.mood-stats h3{font-family:var(--fd);font-size:20px;margin-bottom:6px}
+.mood-stats > p{font-size:13px;color:var(--muted);margin-bottom:24px}
+.mood-bars{display:flex;flex-direction:column;gap:12px}
+.mbar-row{display:flex;align-items:center;gap:10px}
+.mbar-em{font-size:20px;flex-shrink:0;width:28px}
+.mbar-wrap{flex:1}
+.mbar-head{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink2);margin-bottom:5px}
+.mbar-bg{height:10px;border-radius:999px;background:var(--ghost);overflow:hidden}
+.mbar-fill{height:100%;border-radius:999px;transition:width 1.4s cubic-bezier(.4,0,.2,1);width:0}
+.today-note{margin-top:24px;padding:14px 16px;border-radius:var(--r-m);background:rgba(79,70,229,.06);border:1px solid rgba(79,70,229,.12);font-size:13px;color:var(--pri);font-weight:600;line-height:1.6}
+
+/* ─────────────────────────────────────────
+   ANONYMOUS SHARING SECTION
+   FUTURE:
+   · POST /api/stories { category, story, contact? }
+     Store encrypted — moderators only can read
+   · Notify on-duty moderator via push/email
+   · User can opt-in email for reply notification
+     without revealing their identity to moderators
+   · AI pre-screening for crisis keywords → immediate
+     escalation to human moderator + crisis resources
+───────────────────────────────────────── */
+#anon{background:var(--bg)}
+.anon-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start}
+.anon-form-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);padding:36px;box-shadow:var(--sh-s)}
+.anon-form-card h3{font-family:var(--fd);font-size:22px;margin-bottom:6px}
+.anon-form-card > p{font-size:14px;color:var(--muted);margin-bottom:28px}
+/* Category picker */
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+.cat-opt{position:relative}
+.cat-opt input{position:absolute;opacity:0}
+.cat-opt label{display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:12px 8px;border-radius:var(--r-m);border:2px solid var(--border);
+  background:var(--bg);cursor:pointer;transition:all .2s;
+  font-size:12px;font-weight:700;color:var(--muted);text-align:center}
+.cat-opt label .ci{font-size:20px}
+.cat-opt input:checked + label{border-color:var(--pri);color:var(--pri);background:#EEF2FF;box-shadow:0 0 0 3px rgba(79,70,229,.10)}
+.cat-opt label:hover{border-color:var(--pri-l);color:var(--ink)}
+/* Privacy note */
+.priv-note{display:flex;align-items:flex-start;gap:10px;
+  background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);
+  border-radius:var(--r-m);padding:14px;margin-bottom:20px;
+  font-size:13px;color:#166534;line-height:1.6}
+.priv-note .pi{font-size:18px;flex-shrink:0;margin-top:1px}
+/* Info panel */
+.anon-info{display:flex;flex-direction:column;gap:18px}
+.info-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r-l);padding:22px;box-shadow:var(--sh-xs)}
+.info-box h4{font-family:var(--fd);font-size:17px;margin-bottom:12px}
+.steps{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:14px;align-items:flex-start;position:relative;padding-bottom:20px}
+.step:last-child{padding-bottom:0}
+.step::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
+.step:last-child::before{display:none}
+.step-n{width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--pri),var(--sec));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:12px;font-weight:800;z-index:1}
+.step-b .st{font-size:13px;font-weight:700;margin-bottom:2px}
+.step-b .sd{font-size:12px;color:var(--muted);line-height:1.5;padding-top:3px}
+.crisis-box{background:linear-gradient(135deg,var(--rose-l),#FFF1F2);border:1px solid rgba(251,113,133,.3);border-radius:var(--r-l);padding:22px}
+.crisis-box h4{font-family:var(--fd);font-size:16px;margin-bottom:8px;color:#9F1239}
+.crisis-box p{font-size:13px;color:#BE123C;line-height:1.6;margin-bottom:14px}
+.crisis-num{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:var(--r-m);background:#fff;border:1px solid rgba(251,113,133,.3);font-size:14px;font-weight:800;color:#9F1239}
+
+/* ─────────────────────────────────────────
+   MODERATOR RESPONSE SECTION
+   FUTURE:
+   · Moderator dashboard: queue of anonymous stories
+   · Reply goes to original submitter IF they gave email
+   · Public reply visible to all (anonymised story + mod reply)
+   · Moderator credentials verified by PIK-R admin
+   · Rating system: was this response helpful? (👍/👎)
+───────────────────────────────────────── */
+#modresp{background:var(--card)}
+.mod-container{max-width:760px;margin:0 auto}
+.story-thread{display:flex;flex-direction:column;gap:0}
+.story-bubble{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-l) var(--r-l) var(--r-l) 4px;padding:24px 28px;position:relative}
+.story-bubble::after{content:'';position:absolute;bottom:-1px;left:28px;width:0;height:0;border-left:12px solid transparent;border-right:0 solid transparent;border-top:14px solid var(--border)}
+.story-bubble::before{content:'';position:absolute;bottom:0;left:29px;width:0;height:0;border-left:11px solid transparent;border-right:0 solid transparent;border-top:14px solid var(--bg);z-index:1}
+.sb-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.sb-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sb-meta .name{font-size:14px;font-weight:700}
+.sb-meta .time{font-size:12px;color:var(--muted);margin-top:1px}
+.sb-text{font-size:15px;line-height:1.75;color:var(--ink2)}
+.thread-gap{height:24px;border-left:2px dashed var(--border);margin-left:19px}
+.mod-bubble{background:linear-gradient(135deg,#EEF2FF,#F0FFFE);border:1px solid rgba(79,70,229,.15);border-radius:4px var(--r-l) var(--r-l) var(--r-l);padding:24px 28px}
+.mod-bubble .sb-head .sb-av{background:linear-gradient(135deg,var(--pri),var(--sec))}
+.mod-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:var(--r-pill);background:#EEF2FF;color:var(--pri);font-size:11px;font-weight:800;margin-top:12px}
+.resources-inline{margin-top:16px;padding:14px;border-radius:var(--r-m);background:rgba(255,255,255,.7);border:1px solid rgba(79,70,229,.12);font-size:13px;color:var(--pri);line-height:1.7}
+
+/* ─────────────────────────────────────────
+   COMMUNITY STATISTICS
+   FUTURE:
+   · GET /api/stats → { stories, supported, moderators, ... }
+   · Animate counters on scroll via IntersectionObserver
+   · Update in real-time with Supabase Realtime / SSE
+───────────────────────────────────────── */
+#stats{background:linear-gradient(135deg,var(--pri) 0%,#3730A3 50%,#1E1B4B 100%);position:relative;overflow:hidden}
+.stats-mesh{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 600px 400px at 80% 20%,rgba(6,182,212,.15),transparent 60%),
+             radial-gradient(ellipse 400px 400px at 0% 90%,rgba(34,197,94,.10),transparent 60%)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;position:relative;z-index:1}
+.stat-c{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-xl);padding:28px 20px;text-align:center;backdrop-filter:blur(8px);transition:all .3s}
+.stat-c:hover{background:rgba(255,255,255,.14);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.2)}
+.stat-ic{font-size:32px;margin-bottom:12px}
+.stat-n{font-family:'DM Serif Display',serif;font-size:44px;font-weight:400;line-height:1;margin-bottom:6px;color:#fff}
+.stat-l{font-size:13px;color:rgba(255,255,255,.7);font-weight:600}
+.stat-tr{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:var(--r-pill);background:rgba(34,197,94,.25);color:#86EFAC}
+
+/* ─────────────────────────────────────────
+   RESOURCE CORNER
+   FUTURE:
+   · Admin CMS to add/edit/remove resources
+   · Track which resources students click most
+   · Personalise based on mood history
+   · Partner with BKKBN & Kemkes for official content
+───────────────────────────────────────── */
+#resources{background:var(--bg)}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.res-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:all .28s var(--ease);cursor:pointer}
+.res-card:hover{transform:translateY(-5px);box-shadow:var(--sh-l);border-color:rgba(79,70,229,.15)}
+.res-thumb{height:120px;display:flex;align-items:center;justify-content:center;font-size:48px;position:relative}
+.res-body{padding:18px 22px 22px}
+.res-title{font-size:15px;font-weight:800;margin-bottom:6px;line-height:1.35}
+.res-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.res-foot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+.res-read{font-size:13px;font-weight:700;color:var(--pri);transition:gap .2s;display:flex;align-items:center;gap:4px}
+.res-card:hover .res-read{gap:8px}
+
+/* ─────────────────────────────────────────
+   FOOTER
+───────────────────────────────────────── */
+footer{background:var(--ink);color:rgba(255,255,255,.8)}
+.ft-top{padding:60px 0 44px;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px}
+.ft-brand .brand-mk{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--pri),var(--sec));display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;margin-bottom:14px;box-shadow:0 4px 18px rgba(79,70,229,.4)}
+.ft-brand .bn{font-family:var(--fd);font-size:22px;color:#fff;margin-bottom:6px}
+.ft-brand .bt{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:20px;line-height:1.6}
+.socials{display:flex;gap:8px}
+.soc{width:36px;height:36px;border-radius:var(--r-s);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:all .2s;color:#fff}
+.soc:hover{background:var(--pri);border-color:var(--pri);transform:translateY(-2px)}
+.ft-col h5{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#fff;margin-bottom:14px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ft-col ul li a{font-size:14px;color:rgba(255,255,255,.5);transition:color .2s}
+.ft-col ul li a:hover{color:#fff}
+.ft-bottom{padding:18px 0;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.35);flex-wrap:wrap;gap:8px}
+.hotline-strip{background:linear-gradient(90deg,rgba(251,113,133,.15),rgba(167,139,250,.15));border-top:1px solid rgba(251,113,133,.2);padding:14px 0;text-align:center;font-size:13px;font-weight:700;color:rgba(255,255,255,.8)}
+.hotline-strip span{color:#FB7185}
+
+/* ─────────────────────────────────────────
+   TOAST
+───────────────────────────────────────── */
+#toast-root{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.tn{display:flex;align-items:center;gap:10px;padding:13px 18px;border-radius:var(--r-m);font-size:14px;font-weight:600;box-shadow:var(--sh-l);min-width:240px;max-width:360px;transform:translateX(120%);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.tn.show{transform:none;opacity:1}
+.tn-ok{background:#022C22;color:#86EFAC;border:1px solid #166534}
+.tn-er{background:#450A0A;color:#FCA5A5;border:1px solid #991B1B}
+.tn-in{background:#0C1445;color:#A5B4FC;border:1px solid #3730A3}
+.tn-close{margin-left:auto;cursor:pointer;opacity:.6;font-size:15px;padding:0 2px;background:none;border:none;color:inherit}
+.tn-close:hover{opacity:1}
+
+/* ─────────────────────────────────────────
+   BACK TO TOP
+───────────────────────────────────────── */
+#btt{position:fixed;bottom:28px;left:28px;z-index:500;width:42px;height:42px;border-radius:var(--r-m);background:var(--pri);color:#fff;font-size:18px;box-shadow:var(--sh-p);transform:translateY(80px);opacity:0;transition:all .35s var(--ease);border:none;cursor:pointer}
+#btt.show{transform:none;opacity:1}
+#btt:hover{background:var(--pri-d);transform:translateY(-3px)}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+───────────────────────────────────────── */
+@media(max-width:900px){
+  .hbg{
+    display:none;
+  }
+  .nav-links{
+    display:flex;
+    gap:4px;
+  }
+  .nav-links a{
+    padding:6px 10px;
+    font-size:13px;
+  }
+  .nav-btn{
+    display:none;
+  }
+}
+@media(max-width:580px){
+  section{padding:60px 0}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .res-grid{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr}
+  .ft-bottom{flex-direction:column;text-align:center}
+  .moods{gap:8px}
+  .mood-btn{min-width:66px;padding:12px 10px}
+  .cat-grid{grid-template-columns:repeat(2,1fr)}
+  .h-cta{flex-direction:column}
+  .h-cta .btn{width:100%;justify-content:center}
+  .nav-links{
+    overflow-x:auto;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+}
+.nav-links::-webkit-scrollbar{
+    display:none;
+}
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════
+     NAVIGATION
+═══════════════════════════════╗ -->
+<nav id="nav">
+  <div class="wrap nav-in">
+    <a href="#hero" class="logo" aria-label="MindFull home">
+      <div class="logo-mk" aria-hidden="true">🌿</div>
+      MindFull
+    </a>
+    <ul class="nav-links">
+      <li><a href="#checkin">Check-In</a></li>
+      <li><a href="#anon">Ceritakan</a></li>
+      <li><a href="#modresp">Moderator</a></li>
+      <li><a href="#resources">Sumber Daya</a></li>
+    </ul>
+    <div class="nav-btn">
+      <a href="#anon" class="btn btn-p btn-sm">Cerita Sekarang</a>
+    </div>
+  </div>
+</nav>
+<div class="mob-menu" id="mob-menu" aria-hidden="true">
+</div>
+
+<!-- ╔══════════════════════════════
+     HERO
+═══════════════════════════════╗ -->
+<section id="hero">
+  <div class="h-mesh" aria-hidden="true"></div>
+  <div class="blob blob-1" aria-hidden="true"></div>
+  <div class="blob blob-2" aria-hidden="true"></div>
+  <div class="blob blob-3" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <div class="h-inner">
+      <div>
+        <div class="h-pill">
+          <span class="dot" aria-hidden="true"></span>
+          Platform Kesehatan Mental PIK-R
+        </div>
+        <h1 class="hero-h">
+          Kamu Tidak<br><em>Sendiri</em>
+        </h1>
+        <p class="h-sub">
+          MindFull adalah ruang aman di mana kamu bisa mengekspresikan perasaan,
+          berbagi cerita secara anonim, dan mendapatkan dukungan dari moderator
+          terlatih PIK-R — tanpa penilaian, penuh empati.
+        </p>
+        <div class="h-cta">
+          <a href="#checkin" class="btn btn-p">😊 Cek Mood Hari Ini</a>
+          <a href="#anon" class="btn btn-g">💬 Cerita Anonim</a>
+        </div>
+        <div class="h-safe">
+          🔒&nbsp; Semua cerita 100% anonim &amp; rahasia. Kamu aman di sini.
+        </div>
+      </div>
+
+      <!-- Floating preview cards — decorative -->
+      <div class="h-vis" aria-hidden="true">
+        <div class="float-card fc-main">
+          <div class="fc-emoji">😌</div>
+          <div class="fc-label">Check-In Hari Ini</div>
+          <div class="fc-text">"Setelah cerita tadi, aku merasa lebih tenang. Makasih MindFull."</div>
+          <div class="fc-foot">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div class="fc-av">A</div><span>Anonim</span>
+            </div>
+            <span class="tag tag-a">✓ Supported</span>
+          </div>
+        </div>
+        <div class="float-card fc-a">
+          <div class="fc-emoji">🛡</div>
+          <div class="fc-label">Moderator Reply</div>
+          <div class="fc-text">"Perasaanmu valid. Kami ada untukmu 🌿"</div>
+          <div class="fc-foot">
+            <span class="tag tag-p">PIK-R Moderator</span>
+          </div>
+        </div>
+        <div class="float-card fc-b">
+          <div class="fc-emoji">📊</div>
+          <div class="fc-label">Komunitas Hari Ini</div>
+          <div class="fc-text">127 siswa sudah check-in 💙</div>
+          <div class="fc-foot">
+            <span style="font-size:11px">Update tiap jam</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════
+     DAILY CHECK-IN
+═══════════════════════════════╗ -->
+<section id="checkin">
+  <div class="wrap">
+    <div class="sh rev">
+      <span class="label">Daily Check-In</span>
+      <h2 class="sec-h">Bagaimana <em>perasaanmu</em> hari ini?</h2>
+      <p>Luangkan satu menit untuk menyadari kondisi emosionalmu. Tidak ada jawaban yang salah.</p>
+    </div>
+
+    <div class="checkin-grid">
+      <!-- Mood picker form -->
+      <div class="mood-picker rev d1">
+        <h3>Pilih Mood Kamu 🌡</h3>
+        <p>Klik yang paling mendekati perasaanmu sekarang.</p>
+        <div class="moods" role="group" aria-label="Pilih mood">
+          <!--
+            FUTURE: On submit, POST { mood, timestamp, userId/sessionToken }
+            to /api/checkin. Never store PII — use anonymous session IDs.
+          -->
+          <button class="mood-btn" onclick="selectMood(this,'sangat-baik')" aria-label="Sangat Baik">
+            <span class="me">🤩</span>Sangat Baik
+          </button>
+          <button class="mood-btn" onclick="selectMood(this,'baik')" aria-label="Baik">
+            <span class="me">😊</span>Baik
+          </button>
+          <button class="mood-btn" onclick="selectMood(this,'biasa')" aria-label="Biasa Saja">
+            <span class="me">😐</span>Biasa Saja
+          </button>
+          <button class="mood-btn" onclick="selectMood(this,'buruk')" aria-label="Kurang Baik">
+            <span class="me">😔</span>Kurang Baik
+          </button>
+          <button class="mood-btn" onclick="selectMood(this,'sangat-buruk')" aria-label="Sangat Buruk">
+            <span class="me">😢</span>Sangat Buruk
+          </button>
+        </div>
+
+        <div class="mood-note fg" id="mood-note-wrap" style="display:none">
+          <label class="fl" for="mood-note">Mau ceritakan lebih lanjut? (opsional)</label>
+          <textarea class="fta" id="mood-note" rows="3"
+            placeholder="Apa yang membuatmu merasa seperti itu hari ini?"></textarea>
+        </div>
+
+        <button class="btn btn-p" style="width:100%" onclick="submitCheckin()" id="checkin-btn">
+          ✓ Simpan Check-In Hari Ini
+        </button>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;text-align:center">
+          Check-in-mu bersifat pribadi dan tidak akan dibagikan tanpa izin.
+        </p>
+      </div>
+
+      <!-- Community mood stats -->
+      <div class="mood-stats rev d2">
+        <h3>Mood Komunitas Hari Ini 📊</h3>
+        <p>Kamu tidak sendiri — lihat bagaimana perasaan teman-temanmu.</p>
+        <!--
+          FUTURE: GET /api/checkin/stats?date=today
+          Returns aggregated mood percentages (not individual data).
+          Update every hour. Cache on CDN for performance.
+        -->
+        <div class="mood-bars" id="mood-bars">
+          <!-- Populated by JS -->
+        </div>
+        <div class="today-note" id="community-note">
+          💙 <strong>127 siswa</strong> sudah check-in hari ini.
+          Mayoritas merasa cukup baik. Ingat: wajar untuk merasa tidak selalu sempurna!
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════
+     ANONYMOUS SHARING
+═══════════════════════════════╗ -->
+<section id="anon">
+  <div class="wrap">
+    <div class="sh rev">
+      <span class="label">Anonymous Sharing</span>
+      <h2 class="sec-h"><em>Ceritakan</em> apa yang ada<br>di pikiranmu</h2>
+      <p>Tidak perlu nama, tidak perlu khawatir dihakimi. Ceritamu aman di sini.</p>
+    </div>
+
+    <div class="anon-grid">
+      <!-- Story form -->
+      <div class="anon-form-card rev d1">
+        <h3>Bagikan Ceritamu 💬</h3>
+        <p>Semua cerita akan dibaca oleh moderator PIK-R yang terlatih.</p>
+
+        <div class="fg">
+          <label class="fl">Topik Ceritamu</label>
+          <div class="cat-grid" role="radiogroup" aria-label="Pilih topik">
+            <div class="cat-opt">
+              <input type="radio" name="story-cat" id="c1" value="tekanan"/>
+              <label for="c1"><span class="ci">😤</span>Tekanan Belajar</label>
+            </div>
+            <div class="cat-opt">
+              <input type="radio" name="story-cat" id="c2" value="hubungan"/>
+              <label for="c2"><span class="ci">💔</span>Hubungan</label>
+            </div>
+            <div class="cat-opt">
+              <input type="radio" name="story-cat" id="c3" value="keluarga"/>
+              <label for="c3"><span class="ci">🏠</span>Keluarga</label>
+            </div>
+            <div class="cat-opt">
+              <input type="radio" name="story-cat" id="c4" value="masa-depan"/>
+              <label for="c4"><span class="ci">🔮</span>Masa Depan</label>
+            </div>
+            <div class="cat-opt">
+              <input type="radio" name="story-cat" id="c5" value="kesepian"/>
+              <label for="c5"><span class="ci">🌧</span>Kesepian</label>
+            </div>
+            <div class="cat-opt">
+              <input type="radio" name="story-cat" id="c6" value="lainnya"/>
+              <label for="c6"><span class="ci">💭</span>Lainnya</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl" for="story-text">Ceritamu <span style="color:var(--d)">*</span></label>
+          <textarea class="fta" id="story-text" rows="5"
+            placeholder="Tulis apa yang kamu rasakan... tidak ada aturan, tidak ada penilaian. Mulai saja."
+            maxlength="1000" oninput="updateCC(this,'story-cc')"></textarea>
+          <div style="display:flex;justify-content:space-between;margin-top:5px">
+            <span style="font-size:12px;color:var(--muted)">Tulis sebebas-bebasnya.</span>
+            <span style="font-size:11px;color:var(--muted)"><span id="story-cc">0</span>/1000</span>
+          </div>
+        </div>
+
+        <div class="fg">
+          <label class="fl" for="story-email">Email (opsional — untuk terima balasan)</label>
+          <input class="fi" id="story-email" type="email"
+            placeholder="email@kamu.com — hanya digunakan untuk notifikasi balasan"/>
+          <p style="font-size:12px;color:var(--muted);margin-top:5px">
+            <!--
+              FUTURE: If email provided, send encrypted notification when
+              moderator replies. Email is stored separately from story content
+              and never linked publicly.
+            -->
+            Email tidak akan pernah ditampilkan publik atau dikaitkan dengan ceritamu.
+          </p>
+        </div>
+
+        <div class="priv-note">
+          <span class="pi">🔒</span>
+          <span>Ceritamu <strong>100% anonim</strong>. Nama, sekolah, atau identitas apapun tidak diperlukan. Moderator hanya dapat membaca konten cerita, bukan siapa yang menulis.</span>
+        </div>
+
+        <button class="btn btn-p" style="width:100%" onclick="submitStory()">
+          💬 Kirim Cerita Secara Anonim
+        </button>
+      </div>
+
+      <!-- Info panel -->
+      <div class="anon-info rev d2">
+        <div class="info-box">
+          <h4>Bagaimana cara kerjanya?</h4>
+          <div class="steps">
+            <div class="step">
+              <div class="step-n">1</div>
+              <div class="step-b">
+                <div class="st">Tulis ceritamu</div>
+                <div class="sd">Tanpa nama, tanpa khawatir. Tulis apa adanya.</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">2</div>
+              <div class="step-b">
+                <div class="st">Moderator membaca</div>
+                <div class="sd">Moderator terlatih PIK-R akan membaca ceritamu dengan empati.</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">3</div>
+              <div class="step-b">
+                <div class="st">Dapatkan respons</div>
+                <div class="sd">Respons suportif akan dikirim dan dipublikasikan secara anonim.</div>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-n">4</div>
+              <div class="step-b">
+                <div class="st">Bantu orang lain</div>
+                <div class="sd">Ceritamu (anonim) mungkin menginspirasi teman yang punya pengalaman serupa.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="crisis-box">
+          <h4>🆘 Butuh Bantuan Segera?</h4>
+          <p>Jika kamu merasa dalam bahaya atau butuh bicara dengan seseorang sekarang, jangan tunggu.</p>
+          <!--
+            FUTURE: Detect crisis keywords in story text (e.g., "bunuh diri", "menyakiti diri")
+            → Show this box prominently + alert on-duty moderator immediately
+            → Log as high-priority in admin dashboard
+          -->
+          <div class="crisis-num">
+            📞 <span>Into The Light Indonesia: 119 ext 8</span>
+          </div>
+          <div class="crisis-num" style="margin-top:8px">
+            💬 <span>Yayasan Pulih: (021) 788-42580</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════
+     MODERATOR RESPONSE
+═══════════════════════════════╗ -->
+<section id="modresp">
+  <div class="wrap">
+    <div class="sh rev" style="text-align:center">
+      <span class="label">Moderator Response</span>
+      <h2 class="sec-h" style="text-align:center">Setiap cerita <em>mendapat respons</em></h2>
+      <p style="max-width:540px;margin:12px auto 0">
+        Ini adalah contoh bagaimana moderator PIK-R merespons cerita dari komunitas.
+        Semua identitas sudah dianonimkan.
+      </p>
+    </div>
+
+    <div class="mod-container">
+      <!--
+        FUTURE: GET /api/stories/featured → curated public thread
+        Moderators can mark stories as "shareable" in their dashboard.
+        Story is stripped of any identifying info before display.
+      -->
+      <div class="story-thread rev">
+        <!-- Anonymous story -->
+        <div class="story-bubble">
+          <div class="sb-head">
+            <div class="sb-av" style="background:#F1F5F9;font-size:20px">🌧</div>
+            <div class="sb-meta">
+              <div class="name">Anonim · Siswa SMA</div>
+              <div class="time">2 hari yang lalu · Topik: Tekanan Belajar</div>
+            </div>
+            <span class="tag tag-v" style="margin-left:auto">Topik Serupa</span>
+          </div>
+          <p class="sb-text">
+            "Aku ngerasa kayak enggak pernah cukup. Nilai-nilaiku turun dan orang tua terus
+            ngebandingin aku sama kakak. Aku udah berusaha keras tapi kayak nggak ada yang
+            ngehargain. Aku capek. Terkadang aku pengen ngilang aja dari semua ini dan
+            berhenti ngerasa. Nggak tau harus ngomong sama siapa."
+          </p>
+          <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+            <span class="tag tag-v">Tekanan Belajar</span>
+            <span class="tag tag-r">Keluarga</span>
+            <span style="font-size:12px;color:var(--muted);margin-left:auto;align-self:center">👁 243 dibaca</span>
+          </div>
+        </div>
+
+        <div class="thread-gap"></div>
+
+        <!-- Moderator reply -->
+        <div class="mod-bubble rev d1">
+          <div class="sb-head">
+            <div class="sb-av" style="color:#fff;font-size:14px;font-weight:800">MR</div>
+            <div class="sb-meta">
+              <div class="name" style="color:var(--pri)">Moderator Rina · PIK-R</div>
+              <div class="time">1 hari yang lalu · Terverifikasi ✓</div>
+            </div>
+            <span class="tag tag-p" style="margin-left:auto">Respons Resmi</span>
+          </div>
+          <p class="sb-text">
+            Hei, terima kasih sudah berani berbagi. Aku baca setiap kata yang kamu tulis, dan
+            aku mau kamu tahu: <strong>perasaanmu itu valid</strong>. Berjuang keras tapi merasa
+            tidak dilihat itu melelahkan sekali — dan itu bukan kelemahanmu.
+            <br/><br/>
+            Perbandingan dengan kakak pasti menyakitkan. Setiap orang punya jalurnya sendiri,
+            dan nilaimu tidak menentukan nilai dirimu sebagai manusia. Kamu lebih dari sekadar angka.
+            <br/><br/>
+            Aku sangat senang kamu mau cerita di sini. Kalau kamu mau bicara lebih lanjut atau
+            butuh seseorang yang mendengarkan secara langsung, moderator kami selalu siap.
+            Kamu tidak harus menanggung ini sendirian. 🌿
+          </p>
+          <div class="resources-inline">
+            📚 <strong>Bacaan yang mungkin membantu:</strong>
+            Cara Menghadapi Tekanan Akademis · Komunikasi dengan Orang Tua ·
+            <a href="#resources" style="color:var(--pri);font-weight:700">Lihat semua →</a>
+          </div>
+          <div class="mod-tag">🛡 Moderator Terverifikasi PIK-R</div>
+        </div>
+      </div>
+
+      <!-- See more button -->
+      <div style="text-align:center;margin-top:36px" class="rev d2">
+        <button class="btn btn-g" onclick="showToast('Fitur ini akan hadir segera!','💙','info')">
+          Lihat Lebih Banyak Cerita →
+        </button>
+        <p style="font-size:12px;color:var(--muted);margin-top:12px">
+          Semua cerita yang ditampilkan publik sudah dianonimkan dan mendapat persetujuan moderator.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════
+     COMMUNITY STATISTICS
+═══════════════════════════════╗ -->
+<section id="stats">
+  <div class="stats-mesh" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+    <div class="sh rev" style="text-align:center">
+      <span class="label" style="color:rgba(255,255,255,.7)">Dampak Komunitas</span>
+      <h2 class="sec-h" style="color:#fff;text-align:center">Bersama, kita saling <em style="color:#A5F3FC">menguatkan</em></h2>
+      <p style="color:rgba(255,255,255,.6);max-width:480px;margin:12px auto 0">
+        Setiap check-in, setiap cerita, setiap respons — membuat perbedaan nyata.
+      </p>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-c rev">
+        <div class="stat-ic">💬</div>
+        <div class="stat-n" data-target="1247">0</div>
+        <div class="stat-l">Cerita Dibagikan</div>
+        <span class="stat-tr">↑ 18% bulan ini</span>
+      </div>
+      <div class="stat-c rev d1">
+        <div class="stat-ic">🤝</div>
+        <div class="stat-n" data-target="892">0</div>
+        <div class="stat-l">Siswa Didukung</div>
+        <span class="stat-tr">↑ 24% bulan ini</span>
+      </div>
+      <div class="stat-c rev d2">
+        <div class="stat-ic">🛡</div>
+        <div class="stat-n" data-target="14">0</div>
+        <div class="stat-l">Moderator Aktif</div>
+        <span class="stat-tr">Terlatih PIK-R</span>
+      </div>
+      <div class="stat-c rev d3">
+        <div class="stat-ic">⭐</div>
+        <div class="stat-n" data-target="98">0</div>
+        <div class="stat-l">% Merasa Terbantu</div>
+        <span class="stat-tr">Dari survei pengguna</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════
+     RESOURCE CORNER
+═══════════════════════════════╗ -->
+<section id="resources">
+  <div class="wrap">
+    <div class="sh rev" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:40px">
+      <div>
+        <span class="label" style="display:block;margin-bottom:10px">Resource Corner</span>
+        <h2 class="sec-h">Bacaan &amp; <em>sumber daya</em> untukmu</h2>
+        <p style="font-size:15px;color:var(--muted);max-width:480px;margin-top:10px;line-height:1.7">
+          Artikel dan panduan yang dipilih oleh moderator PIK-R untuk membantu kamu tumbuh.
+        </p>
+      </div>
+      <button class="btn btn-g rev d1" onclick="showToast('Lihat semua sumber daya segera hadir!','📚','info')">
+        Lihat Semua →
+      </button>
+    </div>
+
+    <!--
+      FUTURE: GET /api/resources?category=mental-health&limit=6
+      Admin CMS for moderators to add/edit/archive resources.
+      Track clicks per resource for popularity sorting.
+      Personalise based on user's mood history & story categories.
+    -->
+    <div class="res-grid" id="res-grid">
+      <!-- Populated by JavaScript -->
+    </div>
+  </div>
+</section>
+
+
+<!-- ╔══════════════════════════════
+     FOOTER
+═══════════════════════════════╗ -->
+<footer>
+  <div class="wrap">
+    <div class="ft-top">
+      <div class="ft-brand">
+        <div class="brand-mk" aria-hidden="true">🌿</div>
+        <div class="bn">MindFull</div>
+        <div class="bt">"Ruang aman untuk tumbuh, merasa, dan dipahami."</div>
+        <div class="socials" aria-label="Social media">
+          <!-- FUTURE: Replace # with real platform links -->
+          <a href="#" class="soc" aria-label="Instagram">📸</a>
+          <a href="#" class="soc" aria-label="TikTok">🎵</a>
+          <a href="#" class="soc" aria-label="YouTube">▶️</a>
+          <a href="#" class="soc" aria-label="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h5>Platform</h5>
+        <ul>
+          <li><a href="#checkin">Daily Check-In</a></li>
+          <li><a href="#anon">Cerita Anonim</a></li>
+          <li><a href="#modresp">Moderator</a></li>
+          <li><a href="#resources">Sumber Daya</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h5>Tentang</h5>
+        <ul>
+          <li><a href="#">Tim PIK-R</a></li>
+          <li><a href="#">Panduan Moderator</a></li>
+          <li><a href="#">Privasi & Keamanan</a></li>
+          <li><a href="#">Hubungi Kami</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h5>Krisis & Darurat</h5>
+        <ul>
+          <li><a href="#">Into The Light: 119 ext 8</a></li>
+          <li><a href="#">Yayasan Pulih: 021-7884-2580</a></li>
+          <li><a href="#">SEJIWA: 119 ext 8</a></li>
+          <li><a href="#">Chat with PIK-R</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2025 MindFull · PIK-R SMA Negeri 4 Purwokerto</span>
+      <span>Dibuat dengan 💙 untuk kesehatan mental remaja Indonesia</span>
+    </div>
+  </div>
+  <div class="hotline-strip">
+    🆘 Jika kamu dalam krisis, hubungi <span>Into The Light Indonesia: 119 ext 8</span> — tersedia 24 jam
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<!-- Toast container -->
+<div id="toast-root" aria-live="polite" aria-atomic="false"></div>
+
+
+<script>
+'use strict';
+/* ═══════════════════════════════════════════
+   MOCK DATA
+   Replace with fetch() calls to your API.
+═══════════════════════════════════════════ */
+const MOOD_STATS = [
+  { emoji:'🤩', label:'Sangat Baik', pct:18, color:'#22C55E' },
+  { emoji:'😊', label:'Baik',        pct:34, color:'#06B6D4' },
+  { emoji:'😐', label:'Biasa Saja',  pct:28, color:'#F59E0B' },
+  { emoji:'😔', label:'Kurang Baik', pct:14, color:'#FB7185' },
+  { emoji:'😢', label:'Sangat Buruk',pct:6,  color:'#A78BFA' },
+];
+
+const RESOURCES = [
+  {
+    emoji:'🧠', bg:'linear-gradient(135deg,#EDE9FE,#C4B5FD)', cat:'Kesehatan Mental', catClass:'tag-v',
+    title:'Mengenali Tanda-Tanda Anxiety pada Remaja',
+    desc:'Kecemasan bisa datang diam-diam. Pelajari cara mengenali gejalanya dan langkah pertama yang bisa diambil.',
+    time:'5 menit baca', helpful:89,
+  },
+  {
+    emoji:'💪', bg:'linear-gradient(135deg,#DCFCE7,#86EFAC)', cat:'Ketahanan Diri', catClass:'tag-a',
+    title:'7 Cara Membangun Resiliensi Mental yang Terbukti Efektif',
+    desc:'Resiliensi bukan berarti tidak merasa sakit — tapi bangkit setelah terjatuh. Panduan praktis untuk remaja.',
+    time:'8 menit baca', helpful:94,
+  },
+  {
+    emoji:'🔮', bg:'linear-gradient(135deg,#CFFAFE,#A5F3FC)', cat:'Perencanaan Masa Depan', catClass:'tag-s',
+    title:'Cara Menghadapi Tekanan Memilih Jurusan Kuliah',
+    desc:'Takut salah pilih? Kamu tidak harus tahu segalanya sekarang. Panduan navigasi keputusan besar ini.',
+    time:'6 menit baca', helpful:87,
+  },
+  {
+    emoji:'💬', bg:'linear-gradient(135deg,#FEE2E2,#FCA5A5)', cat:'Hubungan', catClass:'tag-r',
+    title:'Cara Berkomunikasi dengan Orang Tua Tentang Tekanan Sekolah',
+    desc:'Merasa tidak didengar oleh orang tua? Panduan komunikasi asertif yang bisa kamu coba mulai hari ini.',
+    time:'4 menit baca', helpful:91,
+  },
+  {
+    emoji:'🌙', bg:'linear-gradient(135deg,#FEF3C7,#FDE68A)', cat:'Kesehatan Mental', catClass:'tag-v',
+    title:'Mengapa Tidur yang Cukup adalah Self-Care Terpenting',
+    desc:'Kurang tidur bukan hal sepele. Ketahui bagaimana tidur mempengaruhi emosi, memori, dan kesehatanmu.',
+    time:'3 menit baca', helpful:96,
+  },
+  {
+    emoji:'🌱', bg:'linear-gradient(135deg,#F0FDF4,#BBF7D0)', cat:'Pertumbuhan Diri', catClass:'tag-a',
+    title:'Journaling untuk Pemula: Cara Melepaskan Beban Pikiran',
+    desc:'Menulis di jurnal bisa menjadi terapi yang powerful. Mulai dengan 5 menit sehari dan rasakan bedanya.',
+    time:'4 menit baca', helpful:92,
+  },
+];
+
+/* ═══════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════ */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      ro.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.rev').forEach(el => ro.observe(el));
+
+/* ═══════════════════════════════════════════
+   NAV scroll state + hamburger
+═══════════════════════════════════════════ */
+const nav = document.getElementById('nav');
+const hbg = document.getElementById('hbg');
+const mob = document.getElementById('mob-menu');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('sc', scrollY > 20);
+  document.getElementById('btt').classList.toggle('show', scrollY > 400);
+}, { passive: true });
+
+/* ═══════════════════════════════════════════
+   TOAST
+   showToast(msg, icon, type)  type: ok|er|in
+═══════════════════════════════════════════ */
+function showToast(msg, icon='✓', type='ok') {
+  const root = document.getElementById('toast-root');
+  const t = document.createElement('div');
+  t.className = `tn tn-${type}`;
+  t.innerHTML = `<span style="font-size:18px">${icon}</span><span>${msg}</span>
+    <button class="tn-close" onclick="this.parentElement.remove()">✕</button>`;
+  root.appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 450); }, 4000);
+}
+
+/* ═══════════════════════════════════════════
+   CHAR COUNT
+═══════════════════════════════════════════ */
+function updateCC(el, id) {
+  document.getElementById(id).textContent = el.value.length;
+}
+
+/* ═══════════════════════════════════════════
+   MOOD BARS — render + animate
+   FUTURE: fetch('/api/checkin/stats?date=today')
+═══════════════════════════════════════════ */
+function renderMoodBars() {
+  const c = document.getElementById('mood-bars');
+  c.innerHTML = MOOD_STATS.map(m => `
+    <div class="mbar-row">
+      <span class="mbar-em">${m.emoji}</span>
+      <div class="mbar-wrap">
+        <div class="mbar-head">
+          <span>${m.label}</span><span>${m.pct}%</span>
+        </div>
+        <div class="mbar-bg">
+          <div class="mbar-fill" data-w="${m.pct}" style="background:${m.color}"></div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+/* Animate bars when section scrolls into view */
+const barObs = new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting) {
+    setTimeout(() => {
+      document.querySelectorAll('.mbar-fill').forEach(el => {
+        el.style.width = el.dataset.w + '%';
+      });
+    }, 200);
+    barObs.disconnect();
+  }
+}, { threshold: 0.3 });
+const ciSec = document.getElementById('checkin');
+if (ciSec) barObs.observe(ciSec);
+
+/* ═══════════════════════════════════════════
+   MOOD SELECTION
+═══════════════════════════════════════════ */
+let selectedMood = null;
+function selectMood(btn, mood) {
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedMood = mood;
+  const noteWrap = document.getElementById('mood-note-wrap');
+  noteWrap.style.display = 'block';
+  noteWrap.style.animation = 'fadeSlide .35s ease';
+  /* Show crisis resources if mood is very bad */
+  if (mood === 'sangat-buruk') {
+    showToast('Kami di sini untukmu 💙 Jika butuh bantuan segera, hubungi 119 ext 8', '🤝', 'in');
+  }
+}
+
+/* ═══════════════════════════════════════════
+   SUBMIT CHECK-IN
+   FUTURE: POST /api/checkin { mood, note, sessionToken }
+═══════════════════════════════════════════ */
+function submitCheckin() {
+  if (!selectedMood) {
+    showToast('Pilih mood-mu dulu ya!', '⚠️', 'er');
+    return;
+  }
+  const moodLabels = {
+    'sangat-baik':'Sangat Baik 🤩','baik':'Baik 😊',
+    'biasa':'Biasa Saja 😐','buruk':'Kurang Baik 😔','sangat-buruk':'Sangat Buruk 😢',
+  };
+  showToast(`Check-in tersimpan: ${moodLabels[selectedMood]}. Terima kasih sudah jujur! 💙`, '✓', 'ok');
+  /* Disable submit to prevent double-submit */
+  const btn = document.getElementById('checkin-btn');
+  btn.textContent = '✓ Check-In Tersimpan!';
+  btn.disabled = true;
+  btn.style.opacity = '.7';
+}
+
+/* ═══════════════════════════════════════════
+   SUBMIT STORY
+   FUTURE:
+   1. Basic keyword check for crisis terms
+   2. If safe → POST /api/stories { category, text, emailHash? }
+   3. If crisis keywords → POST /api/stories/crisis → alert moderator
+   4. Always show crisis resources regardless
+═══════════════════════════════════════════ */
+const CRISIS_WORDS = ['bunuh','mati','sakit sekali','hilang','menyakiti diri','putus asa','tidak mau hidup'];
+function submitStory() {
+  const text = document.getElementById('story-text').value.trim();
+  const cat  = document.querySelector('input[name="story-cat"]:checked');
+  if (!cat)  { showToast('Pilih topik ceritamu!', '⚠️', 'er'); return; }
+  if (text.length < 20) { showToast('Ceritamu terlalu singkat — tulis lebih banyak ya!', '⚠️', 'er'); return; }
+  /* Client-side crisis keyword detection */
+  const isCrisis = CRISIS_WORDS.some(w => text.toLowerCase().includes(w));
+  if (isCrisis) {
+    showToast('Ceritamu sudah kami terima. Moderator akan segera membalas. Ingat: 119 ext 8 tersedia 24 jam 💙', '🤝', 'in');
+  } else {
+    showToast('Ceritamu berhasil dikirim secara anonim! Moderator akan membalasnya segera. 🌿', '💬', 'ok');
+  }
+  /* Reset form */
+  document.getElementById('story-text').value = '';
+  document.getElementById('story-email').value = '';
+  document.getElementById('story-cc').textContent = '0';
+  if (cat) cat.checked = false;
+}
+
+/* ═══════════════════════════════════════════
+   ANIMATED COUNTERS
+   Triggered once stats section enters viewport.
+   FUTURE: Replace hardcoded values with API data.
+═══════════════════════════════════════════ */
+let countered = false;
+function animateNum(el, target, dur = 1400) {
+  const s = performance.now();
+  (function step(now) {
+    const p = Math.min((now - s) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3); /* ease-out cubic */
+    el.textContent = Math.floor(e * target).toLocaleString('id');
+    if (p < 1) requestAnimationFrame(step);
+  })(performance.now());
+}
+new IntersectionObserver(entries => {
+  if (entries[0].isIntersecting && !countered) {
+    countered = true;
+    document.querySelectorAll('.stat-n[data-target]').forEach(el => {
+      animateNum(el, parseInt(el.dataset.target));
+    });
+  }
+}, { threshold: 0.3 }).observe(document.getElementById('stats'));
+
+/* ═══════════════════════════════════════════
+   RENDER RESOURCES
+═══════════════════════════════════════════ */
+function renderResources() {
+  document.getElementById('res-grid').innerHTML = RESOURCES.map(r => `
+    <article class="res-card" onclick="showToast('Artikel segera hadir! 📚','📖','in')">
+      <div class="res-thumb" style="background:${r.bg}">${r.emoji}</div>
+      <div class="res-body">
+        <div style="margin-bottom:10px">
+          <span class="tag ${r.catClass}">${r.cat}</span>
+        </div>
+        <div class="res-title">${r.title}</div>
+        <p class="res-desc">${r.desc}</p>
+        <div class="res-foot">
+          <span>📖 ${r.time}</span>
+          <span class="res-read">Baca <span>→</span></span>
+        </div>
+      </div>
+    </article>`).join('');
+  /* Stagger reveal for resource cards */
+  document.querySelectorAll('.res-card').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    const resObs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        setTimeout(() => {
+          el.style.transition = 'all .5s var(--ease)';
+          el.style.opacity = '1';
+          el.style.transform = 'none';
+        }, i * 90);
+        resObs.disconnect();
+      }
+    }, { threshold: 0.1 });
+    resObs.observe(el);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderMoodBars();
+  renderResources();
+});
+</script>
+</body>
+</html>
