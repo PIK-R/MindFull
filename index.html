@@ -521,8 +521,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
   <div class="wrap">
     <div class="h-inner">
       <div>
-        <div class="mobile-brand">
-  🌿 <span>MindFull</span>
+       <div class="mobile-brand">
+        <div class="logo-mk">🌿</div>
+  <span>MindFull</span>
 </div>
         <div class="h-pill">
           <span class="dot" aria-hidden="true"></span>
@@ -1087,6 +1088,24 @@ const ro = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.rev').forEach(el => ro.observe(el));
 
+function playLogoSound() {
+  const logo = document.querySelector(".mobile-brand .logo-mk");
+
+  // Reset animasi supaya bisa dipicu lagi
+  logo.classList.remove("bounce");
+
+  // Paksa browser reflow
+  void logo.offsetWidth;
+
+  // Jalankan lagi animasinya
+  logo.classList.add("bounce");
+}
+
+const mobileBrand = document.querySelector(".mobile-brand");
+
+if (mobileBrand) {
+  mobileBrand.addEventListener("click", playLogoEffect);
+}
 /* ═══════════════════════════════════════════
    NAV scroll state + hamburger
 ═══════════════════════════════════════════ */
@@ -1255,6 +1274,13 @@ new IntersectionObserver(entries => {
   }
 }, { threshold: 0.3 }).observe(document.getElementById('stats'));
 
+const logoClick = new Audio("click.mp3");
+
+function playLogoSound() {
+  logoClick.currentTime = 0;
+  logoClick.play();
+}
+
 /* ═══════════════════════════════════════════
    RENDER RESOURCES
 ═══════════════════════════════════════════ */
@@ -1335,6 +1361,21 @@ lucide.createIcons();
 </body>
 </html>
 <style>
+  .logo-mk.bounce {
+  animation: logoBounce .35s ease;
+}
+
+@keyframes logoBounce {
+  0%   { transform: scale(1) rotate(0deg); }
+  50%  { transform: scale(1.15) rotate(-10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+ .mobile-brand:hover .logo-mk,
+.mobile-brand:active .logo-mk {
+  transform: rotate(-10deg) scale(1.1);
+}
+
   @media (max-width: 768px) {
   .wrap {
     padding: 0 16px;
@@ -1453,6 +1494,47 @@ lucide.createIcons();
 
   #hero {
     padding-top: 32px;
+  }
+}
+
+.mobile-brand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mobile-brand .logo-mk {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(135deg, var(--pri), var(--sec));
+  color: white;
+  font-size: 20px;
+}
+
+.mobile-brand {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 20px;
+
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--pri);
   }
 }
 </style>
