@@ -109,7 +109,7 @@ section{padding:88px 0}
 .fg{margin-bottom:16px}
 .fl{display:block;font-size:13px;font-weight:700;color:var(--ink2);margin-bottom:6px}
 .fi,.fta{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:var(--r-m);font-size:14px;color:var(--ink);background:var(--card);transition:border-color .2s,box-shadow .2s;outline:none}
-.fi:focus,.fta:focus{border-color:var(--pri);box-shadow:0 0 0 4px rgba(79,70,229,.10)}
+.fi:focus,.fta:focus{border-color:var(--pri);box-shadow:0 0 0 4px rgba(79,70,229,.20)}
 .fi::placeholder,.fta::placeholder{color:var(--faint)}
 .fta{resize:vertical;min-height:120px;line-height:1.6}
 
@@ -521,6 +521,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
   <div class="wrap">
     <div class="h-inner">
       <div>
+        <div class="mobile-brand">
+  🌿 <span>MindFull</span>
+</div>
         <div class="h-pill">
           <span class="dot" aria-hidden="true"></span>
           Platform Kesehatan Mental PIK-R
@@ -700,10 +703,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
           <label class="fl" for="story-text">Ceritamu <span style="color:var(--d)">*</span></label>
           <textarea class="fta" id="story-text" rows="5"
             placeholder="Tulis apa yang kamu rasakan... tidak ada aturan, tidak ada penilaian. Mulai saja."
-            maxlength="1000" oninput="updateCC(this,'story-cc')"></textarea>
+            ></textarea>
           <div style="display:flex;justify-content:space-between;margin-top:5px">
             <span style="font-size:12px;color:var(--muted)">Tulis sebebas-bebasnya.</span>
-            <span style="font-size:11px;color:var(--muted)"><span id="story-cc">0</span>/1000</span>
           </div>
         </div>
 
@@ -721,14 +723,16 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
           </p>
         </div>
 
+        <form onsubmit="submitStory(event)">
         <div class="priv-note">
           <span class="pi"><i data-lucide="shield-check"> </i></span>
           <span>Ceritamu <strong>100% anonim</strong>. Nama, sekolah, atau identitas apapun tidak diperlukan. Moderator hanya dapat membaca konten cerita, bukan siapa yang menulis.</span>
         </div>
 
-        <button class="btn btn-p" style="width:100%" onclick="submitStory()">
-          💬 Kirim Cerita Secara Anonim
+        <button class="btn btn-p" style="width:100%" type="submit">
+          <i data-lucide="arrow-right"></i> Kirim Cerita Secara Anonim
         </button>
+      </form>
       </div>
 
       <!-- Info panel -->
@@ -1208,7 +1212,8 @@ function submitCheckin() {
    4. Always show crisis resources regardless
 ═══════════════════════════════════════════ */
 const CRISIS_WORDS = ['bunuh','mati','sakit sekali','hilang','menyakiti diri','putus asa','tidak mau hidup'];
-function submitStory() {
+function submitStory(e) {
+e.preventDefault(); 
   const text = document.getElementById('story-text').value.trim();
   const cat  = document.querySelector('input[name="story-cat"]:checked');
   if (!cat)  { showToast('Pilih topik ceritamu!', '⚠️', 'er'); return; }
@@ -1223,7 +1228,6 @@ function submitStory() {
   /* Reset form */
   document.getElementById('story-text').value = '';
   document.getElementById('story-email').value = '';
-  document.getElementById('story-cc').textContent = '0';
   if (cat) cat.checked = false;
 }
 
@@ -1300,10 +1304,38 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
 lucide.createIcons();
 </script>
+<div class="mobile-bottom-nav">
+
+  <a href="#hero">
+    🏠
+    <span>Home</span>
+  </a>
+
+  <a href="#checkin">
+    😊
+    <span>Mood</span>
+  </a>
+
+  <a href="#anon">
+    💬
+    <span>Curhat</span>
+  </a>
+
+  <a href="#modresp">
+    🛡️
+    <span>Support</span>
+  </a>
+
+  <a href="#resources">
+    📚
+    <span>Resource</span>
+  </a>
+
+</div>
 </body>
 </html>
 <style>
-  @media (max-width: 800px) {
+  @media (max-width: 768px) {
   .wrap {
     padding: 0 16px;
   }
@@ -1351,6 +1383,76 @@ lucide.createIcons();
 @media (max-width: 400px) {
   .cat-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+
+  body {
+    padding-bottom: 80px;
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    height: 70px;
+
+    background: rgba(255,255,255,.95);
+    backdrop-filter: blur(12px);
+
+    border-top: 1px solid var(--border);
+
+    z-index: 9999;
+  }
+
+  .mobile-bottom-nav a {
+    text-decoration: none;
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+}
+
+@media (max-width:768px){
+
+  #nav{
+    display:none;
+  }
+
+}
+
+.mobile-brand {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--pri);
+  }
+
+  #nav {
+    display: none;
+  }
+
+  #hero {
+    padding-top: 32px;
   }
 }
 </style>
