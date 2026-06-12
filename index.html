@@ -1302,3 +1302,55 @@ lucide.createIcons();
 </script>
 </body>
 </html>
+<style>
+  @media (max-width: 800px) {
+  .wrap {
+    padding: 0 16px;
+  }
+
+  section {
+    padding: 56px 0;
+  }
+
+  .h-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .h-cta {
+    justify-content: center;
+  }
+
+  .h-safe {
+    margin: 32px auto 0;
+  }
+
+  .h-vis {
+    height: 320px;
+    transform: scale(0.85);
+    transform-origin: top center;
+  }
+
+  .checkin-grid,
+  .anon-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .anon-form-card,
+  .card-pad {
+    padding: 24px;
+  }
+
+  .cat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .cat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
