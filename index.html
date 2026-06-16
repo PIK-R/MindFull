@@ -102,8 +102,28 @@ img{display:block;max-width:100%}
 /* ─── LAYOUT ─── */
 .wrap{width:min(100% - 48px,1160px);margin:0 auto}
 section{padding:88px 0}
+.page{display:none}
+.page:not(.is-active){display:none!important}
+.page.is-active{display:block;animation:pageIn .24s var(--ease)}
+body.page-app{background:var(--bg)}
+body.page-app section{padding:72px 0}
+body.page-app footer{display:none}
+body.page-app .page.is-active:not(#stats){min-height:calc(100vh - 64px)}
+body.page-app #hero{min-height:auto;padding:104px 0 32px}
+body.page-app #stats{padding:0 0 72px;background:var(--bg)}
+body.page-app #stats .wrap{background:linear-gradient(135deg,var(--pri) 0%,#3730A3 50%,#1E1B4B 100%);border-radius:var(--r-l);overflow:hidden;padding:36px;position:relative;box-shadow:var(--sh-m)}
+body.page-app #stats .stats-mesh{border-radius:var(--r-l)}
+body.page-app .h-inner{min-height:auto;padding:34px 0 28px;grid-template-columns:minmax(0,1fr) minmax(340px,.82fr);gap:56px}
+body.page-app .hero-h{font-size:clamp(42px,4.2vw,60px)}
+body.page-app .h-sub{max-width:560px;margin-bottom:28px}
+body.page-app .h-safe{margin-top:28px}
+body.page-app .h-vis{height:360px}
+body.page-app .sh{margin-bottom:34px}
+body.page-app .nav-links a.active,
+body.page-app .mob-menu a.active{color:var(--pri);background:#EEF2FF}
+body.page-app .mobile-bottom-nav a.active{color:var(--pri)}
 
-/* ─── SCROLL REVEAL ─── */
+/* ─── SCROLL REVEAL ───
    IntersectionObserver adds .in when element enters viewport.
    CSS handles the transition. No library needed. */
 .rev{opacity:0;transform:translateY(24px);transition:opacity .6s var(--ease),transform .6s var(--ease)}
@@ -472,8 +492,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
    RESPONSIVE
 ───────────────────────────────────────── */
 @media(max-width:900px){
-  .h-inner,.checkin-grid,.anon-grid{grid-template-columns:1fr}
-  .h-inner{min-height:auto;gap:44px;padding:56px 0}
+  body.page-app .h-inner{grid-template-columns:1fr;min-height:auto;gap:44px;padding:56px 0}
+  .checkin-grid,.anon-grid{grid-template-columns:1fr}
   .h-vis{display:none}
   .moods{grid-template-columns:repeat(5,minmax(84px,1fr));overflow-x:auto;padding-bottom:4px}
   .stats-grid{grid-template-columns:1fr 1fr}
@@ -483,9 +503,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
   .hbg{display:flex}
 }
 @media(max-width:580px){
-  section{padding:60px 0}
+  body.page-app section{padding:60px 0}
   .wrap{width:min(100% - 32px,1160px)}
-  .hero-h{font-size:clamp(42px,13vw,58px)}
+  body.page-app .hero-h{font-size:clamp(42px,13vw,58px)}
   .sec-h{font-size:clamp(28px,9vw,36px)}
   .stats-grid{grid-template-columns:1fr 1fr}
   .res-grid{grid-template-columns:1fr}
@@ -500,6 +520,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 
 /* ─── ANIMATIONS ─── */
 @keyframes fadeSlide{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+@keyframes pageIn{
   from{opacity:0;transform:translateY(8px)}
   to{opacity:1;transform:none}
 }
@@ -524,9 +548,9 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 
 @media(max-width:768px){
   .wrap{width:min(100% - 32px,1160px)}
-  section{padding:56px 0}
+  body.page-app section{padding:56px 0}
   #nav,.mob-menu,.hbg{display:none!important}
-  #hero{padding:20px 0 0;min-height:auto}
+  body.page-app #hero{padding:20px 0 0;min-height:auto}
   body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
   #btt{bottom:88px}
   .mobile-brand{
@@ -534,10 +558,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
     gap:12px;margin-bottom:18px;
     font-size:22px;font-weight:800;color:var(--pri);cursor:pointer;
   }
-  .h-inner{grid-template-columns:1fr;gap:34px;text-align:center;padding:32px 0 48px}
-  .h-sub{max-width:620px;margin-left:auto;margin-right:auto;font-size:16px;line-height:1.7}
+  body.page-app .h-inner{grid-template-columns:1fr;gap:34px;text-align:center;padding:32px 0 48px}
+  body.page-app .h-sub{max-width:620px;margin-left:auto;margin-right:auto;font-size:16px;line-height:1.7}
   .h-cta{justify-content:center}
-  .h-safe{margin:32px auto 0}
+  body.page-app .h-safe{margin:32px auto 0}
   .checkin-grid,.anon-grid{grid-template-columns:1fr;gap:32px}
   .anon-form-card,.card-pad{padding:24px;border-radius:var(--r-m)}
   .mobile-bottom-nav{
@@ -557,25 +581,26 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 }
 </style>
 </head>
-<body>
+<body class="page-app">
 
 <!-- ╔══════════════════════════════
      NAVIGATION
 ═══════════════════════════════╗ -->
 <nav id="nav">
   <div class="wrap nav-in">
-    <a href="#hero" class="logo" aria-label="MindFull home">
+    <a href="#hero" class="logo" data-page="hero" aria-label="MindFull home">
       <div class="logo-mk" aria-hidden="true"><i data-lucide="leaf"></i></div>
       MindFull
     </a>
     <ul class="nav-links">
-      <li><a href="#checkin">Check-In</a></li>
-      <li><a href="#anon">Ceritakan</a></li>
-      <li><a href="#modresp">Moderator</a></li>
-      <li><a href="#resources">Sumber Daya</a></li>
+      <li><a href="#hero" data-page="hero">Home</a></li>
+      <li><a href="#checkin" data-page="checkin">Mood</a></li>
+      <li><a href="#anon" data-page="anon">Curhat</a></li>
+      <li><a href="#modresp" data-page="modresp">Support</a></li>
+      <li><a href="#resources" data-page="resources">Resources</a></li>
     </ul>
     <div class="nav-btn">
-      <a href="#anon" class="btn btn-p btn-sm">Cerita Sekarang</a>
+      <a href="#anon" class="btn btn-p btn-sm" data-page="anon">Cerita Sekarang</a>
     </div>
     <button class="hbg" id="hbg" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -583,24 +608,28 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
   </div>
 </nav>
 <div class="mob-menu" id="mob-menu">
-  <a href="#checkin" onclick="closeMenu()">
+  <a href="#hero" data-page="hero" onclick="closeMenu()">
+    <i data-lucide="home"></i>
+    Home
+  </a>
+  <a href="#checkin" data-page="checkin" onclick="closeMenu()">
     <i data-lucide="activity"></i>
     Check-In
   </a>
-  <a href="#anon" onclick="closeMenu()">
+  <a href="#anon" data-page="anon" onclick="closeMenu()">
     <i data-lucide="message-circle"></i>
     Ceritakan
   </a>
-  <a href="#modresp" onclick="closeMenu()">
+  <a href="#modresp" data-page="modresp" onclick="closeMenu()">
     <i data-lucide="shield-check"></i>
     Moderator
   </a>
-  <a href="#resources" onclick="closeMenu()">
+  <a href="#resources" data-page="resources" onclick="closeMenu()">
     <i data-lucide="book-open"></i>
     Sumber Daya
   </a>
   <div class="mob-bts">
-    <a href="#anon" class="btn btn-p btn-sm" onclick="closeMenu()">
+    <a href="#anon" class="btn btn-p btn-sm" data-page="anon" onclick="closeMenu()">
       Mulai Cerita
     </a>
   </div>
@@ -609,7 +638,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 <!-- ╔══════════════════════════════
      HERO
 ═══════════════════════════════╗ -->
-<section id="hero">
+<section id="hero" class="page is-active" data-page-group="hero">
   <div class="h-mesh" aria-hidden="true"></div>
   <div class="blob blob-1" aria-hidden="true"></div>
   <div class="blob blob-2" aria-hidden="true"></div>
@@ -635,8 +664,8 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
           terlatih PIK-R — tanpa penilaian, penuh empati.
         </p>
         <div class="h-cta">
-          <a href="#checkin" class="btn btn-p"><i data-lucide="smile"></i> Cek Mood Hari Ini</a>
-          <a href="#anon" class="btn btn-g"><i data-lucide="message-circle"></i> Cerita Anonim</a>
+          <a href="#checkin" class="btn btn-p" data-page="checkin"><i data-lucide="smile"></i> Cek Mood Hari Ini</a>
+          <a href="#anon" class="btn btn-g" data-page="anon"><i data-lucide="message-circle"></i> Cerita Anonim</a>
         </div>
         <div class="h-safe">
           <i data-lucide="lock"></i> Semua cerita 100% anonim &amp; rahasia. Kamu aman di sini.
@@ -681,7 +710,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 <!-- ╔══════════════════════════════
      DAILY CHECK-IN
 ═══════════════════════════════╗ -->
-<section id="checkin">
+<section id="checkin" class="page" data-page-group="checkin">
   <div class="wrap">
     <div class="sh rev">
       <span class="label">Daily Check-In</span>
@@ -753,7 +782,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 <!-- ╔══════════════════════════════
      ANONYMOUS SHARING
 ═══════════════════════════════╗ -->
-<section id="anon">
+<section id="anon" class="page" data-page-group="anon">
   <div class="wrap">
     <div class="sh rev">
       <span class="label">Anonymous Sharing</span>
@@ -894,7 +923,7 @@ Butuh Bantuan Segera?</h4>
 <!-- ╔══════════════════════════════
      MODERATOR RESPONSE
 ═══════════════════════════════╗ -->
-<section id="modresp">
+<section id="modresp" class="page" data-page-group="modresp">
   <div class="wrap">
     <div class="sh rev" style="text-align:center">
       <span class="label">Moderator Response</span>
@@ -985,7 +1014,7 @@ Butuh Bantuan Segera?</h4>
 <!-- ╔══════════════════════════════
      COMMUNITY STATISTICS
 ═══════════════════════════════╗ -->
-<section id="stats">
+<section id="stats" class="page is-active" data-page-group="hero">
   <div class="stats-mesh" aria-hidden="true"></div>
   <div class="wrap" style="position:relative;z-index:1">
     <div class="sh rev" style="text-align:center">
@@ -1029,7 +1058,7 @@ Butuh Bantuan Segera?</h4>
 <!-- ╔══════════════════════════════
      RESOURCE CORNER
 ═══════════════════════════════╗ -->
-<section id="resources">
+<section id="resources" class="page" data-page-group="resources">
   <div class="wrap">
     <div class="sh rev" style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:16px;margin-bottom:40px">
       <div>
@@ -1212,6 +1241,36 @@ function closeMenu() {
   hbg.setAttribute('aria-expanded','false');
   mob.setAttribute('aria-hidden','true');
 }
+
+const APP_PAGES = ['hero', 'checkin', 'anon', 'modresp', 'resources'];
+function setActivePage(pageId, updateHash = true) {
+  const page = APP_PAGES.includes(pageId) ? pageId : 'hero';
+  document.querySelectorAll('.page').forEach(section => {
+    section.classList.toggle('is-active', section.dataset.pageGroup === page);
+  });
+  document.querySelectorAll('[data-page]').forEach(link => {
+    link.classList.toggle('active', link.dataset.page === page);
+    if (link.dataset.page) {
+      link.setAttribute('aria-current', link.dataset.page === page ? 'page' : 'false');
+    }
+  });
+  closeMenu();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (updateHash && location.hash !== `#${page}`) {
+    history.pushState({ page }, '', `#${page}`);
+  }
+}
+
+document.addEventListener('click', e => {
+  const link = e.target.closest('[data-page]');
+  if (!link) return;
+  e.preventDefault();
+  setActivePage(link.dataset.page);
+});
+
+window.addEventListener('popstate', () => {
+  setActivePage(location.hash.replace('#', ''), false);
+});
 
 /* ═══════════════════════════════════════════
    TOAST
@@ -1420,31 +1479,32 @@ document.addEventListener('DOMContentLoaded', () => {
   renderMoodBars();
   renderResources();
   refreshIcons();
+  setActivePage(location.hash.replace('#', ''), false);
 });
 </script>
 <div class="mobile-bottom-nav">
 
-  <a href="#hero">
+  <a href="#hero" data-page="hero">
     <i data-lucide="home"></i>
     <span>Home</span>
   </a>
 
-  <a href="#checkin">
+  <a href="#checkin" data-page="checkin">
     <i data-lucide="smile"></i>
     <span>Mood</span>
   </a>
 
-  <a href="#anon">
+  <a href="#anon" data-page="anon">
     <i data-lucide="message-circle"></i>
     <span>Curhat</span>
   </a>
 
-  <a href="#modresp">
+  <a href="#modresp" data-page="modresp">
     <i data-lucide="shield-check"></i>
     <span>Support</span>
   </a>
 
-  <a href="#resources">
+  <a href="#resources" data-page="resources">
     <i data-lucide="book-open"></i>
     <span>Resource</span>
   </a>
