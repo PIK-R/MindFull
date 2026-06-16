@@ -6,10 +6,7 @@
 <title>MindFull — Kamu Tidak Sendiri</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 /* ─────────────────────────────────────────
    TOKENS
@@ -39,7 +36,7 @@
   --ghost:#E2E8F0;
 
   --fd:'DM Serif Display',Georgia,serif;
-  --fb:'Nunito',system-ui,sans-serif;
+  --fb:'Plus Jakarta Sans',system-ui,sans-serif;
 
   --r-s:10px; --r-m:18px; --r-l:26px; --r-xl:36px; --r-pill:999px;
 
@@ -65,7 +62,40 @@ button{cursor:pointer;font-family:var(--fb);border:none;background:none}
 input,textarea,select{font-family:var(--fb)}
 img{display:block;max-width:100%}
 
-/* ─── LAYOUT ─── */
+/* ─── LUCIDE ICONS ─── */
+[data-lucide],.ic svg{display:block}
+.logo-mk svg,.brand-mk svg{width:18px;height:18px;stroke:#fff}
+.mobile-brand .logo-mk svg{width:20px;height:20px}
+.fc-emoji svg{width:30px;height:30px;stroke:var(--pri)}
+.me svg{width:28px;height:28px;transition:transform .25s var(--spring)}
+.mbar-em svg{width:20px;height:20px}
+.stat-ic{display:flex;justify-content:center}
+.stat-ic svg{width:32px;height:32px;stroke:#fff}
+.soc svg{width:16px;height:16px;stroke:rgba(255,255,255,.85)}
+.soc:hover svg{stroke:#fff}
+.res-thumb svg{width:48px;height:48px;stroke:var(--pri)}
+.crisis-num svg{width:18px;height:18px;flex-shrink:0;stroke:#9F1239}
+.h-safe svg,.priv-note .pi svg,.today-note svg,.resources-inline svg,.mod-tag svg,.crisis-box h4 svg{width:18px;height:18px;flex-shrink:0}
+.inline-ic svg{width:14px;height:14px;display:inline;vertical-align:-2px}
+.sb-av svg{width:20px;height:20px;stroke:var(--muted)}
+.mobile-bottom-nav svg{width:22px;height:22px}
+.btn svg,.tag svg{width:18px;height:18px;flex-shrink:0}
+.tag svg{width:14px;height:14px}
+.mood-picker h2,.mood-stats h3,.anon-form-card h3{display:flex;align-items:center;gap:8px}
+.mood-picker h2 svg,.mood-stats h3 svg,.anon-form-card h3 svg{width:22px;height:22px}
+#btt svg{width:20px;height:20px;margin:auto}
+.hotline-strip svg{width:16px;height:16px;vertical-align:-3px;display:inline;stroke:#FB7185}
+.ft-bottom .ic-heart svg{width:14px;height:14px;display:inline;vertical-align:-2px;stroke:#FB7185;fill:#FB7185}
+.tn-ic svg{width:18px;height:18px;flex-shrink:0}
+.tn-close svg{width:16px;height:16px}
+.cat-opt label .ci svg{width:20px;height:20px}
+.mood-btn:hover .me svg,.mood-btn.sel .me svg{transform:scale(1.2)}
+.res-foot svg{width:14px;height:14px;stroke:var(--muted)}
+.mod-tag,.resources-inline,.h-safe,.crisis-num,.today-note{display:flex;align-items:center;gap:8px}
+.mod-tag svg,.resources-inline svg{stroke:var(--pri)}
+.sb-meta .time{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+
+/* ─── LAYOUT ───
 .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 section{padding:88px 0}
 
@@ -458,6 +488,62 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
   .h-cta{flex-direction:column}
   .h-cta .btn{width:100%;justify-content:center}
 }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeSlide{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:none}
+}
+@keyframes logoBounce{
+  0%{transform:scale(1) rotate(0deg)}
+  50%{transform:scale(1.15) rotate(-10deg)}
+  100%{transform:scale(1) rotate(0deg)}
+}
+.logo-mk.bounce{animation:logoBounce .35s ease}
+
+/* ─── MOBILE BRAND + BOTTOM NAV ─── */
+.mobile-brand{display:none}
+.mobile-brand .logo-mk{
+  width:42px;height:42px;border-radius:14px;
+  display:flex;justify-content:center;align-items:center;
+  background:linear-gradient(135deg,var(--pri),var(--sec));
+  color:#fff;font-size:20px;
+}
+.mobile-brand:hover .logo-mk,
+.mobile-brand:active .logo-mk{transform:rotate(-10deg) scale(1.1)}
+.mobile-bottom-nav{display:none}
+
+@media(max-width:768px){
+  .wrap{padding:0 16px}
+  section{padding:56px 0}
+  #nav,.mob-menu,.hbg{display:none!important}
+  #hero{padding-top:32px;min-height:auto}
+  body{padding-bottom:80px}
+  #btt{bottom:88px}
+  .mobile-brand{
+    display:flex;justify-content:center;align-items:center;
+    gap:12px;margin-bottom:20px;
+    font-size:22px;font-weight:800;color:var(--pri);cursor:pointer;
+  }
+  .h-inner{grid-template-columns:1fr;gap:40px;text-align:center}
+  .h-cta{justify-content:center}
+  .h-safe{margin:32px auto 0}
+  .checkin-grid,.anon-grid{grid-template-columns:1fr;gap:32px}
+  .anon-form-card,.card-pad{padding:24px}
+  .mobile-bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;
+    justify-content:space-around;align-items:center;height:70px;
+    background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+    border-top:1px solid var(--border);z-index:9999;
+  }
+  .mobile-bottom-nav a{
+    text-decoration:none;font-size:13px;color:var(--muted);
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+  }
+}
+@media(max-width:400px){
+  .cat-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -468,7 +554,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
 <nav id="nav">
   <div class="wrap nav-in">
     <a href="#hero" class="logo" aria-label="MindFull home">
-      <div class="logo-mk" aria-hidden="true">🌿</div>
+      <div class="logo-mk" aria-hidden="true"><i data-lucide="leaf"></i></div>
       MindFull
     </a>
     <ul class="nav-links">
@@ -522,7 +608,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
     <div class="h-inner">
       <div>
        <div class="mobile-brand">
-        <div class="logo-mk">🌿</div>
+        <div class="logo-mk"><i data-lucide="leaf"></i></div>
   <span>MindFull</span>
 </div>
         <div class="h-pill">
@@ -538,39 +624,39 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
           terlatih PIK-R — tanpa penilaian, penuh empati.
         </p>
         <div class="h-cta">
-          <a href="#checkin" class="btn btn-p">😊 Cek Mood Hari Ini</a>
-          <a href="#anon" class="btn btn-g">💬 Cerita Anonim</a>
+          <a href="#checkin" class="btn btn-p"><i data-lucide="smile"></i> Cek Mood Hari Ini</a>
+          <a href="#anon" class="btn btn-g"><i data-lucide="message-circle"></i> Cerita Anonim</a>
         </div>
         <div class="h-safe">
-          🔒&nbsp; Semua cerita 100% anonim &amp; rahasia. Kamu aman di sini.
+          <i data-lucide="lock"></i> Semua cerita 100% anonim &amp; rahasia. Kamu aman di sini.
         </div>
       </div>
 
       <!-- Floating preview cards — decorative -->
       <div class="h-vis" aria-hidden="true">
         <div class="float-card fc-main">
-          <div class="fc-emoji">😌</div>
+          <div class="fc-emoji"><i data-lucide="smile-plus"></i></div>
           <div class="fc-label">Check-In Hari Ini</div>
           <div class="fc-text">"Setelah cerita tadi, aku merasa lebih tenang. Makasih MindFull."</div>
           <div class="fc-foot">
             <div style="display:flex;align-items:center;gap:6px">
               <div class="fc-av">A</div><span>Anonim</span>
             </div>
-            <span class="tag tag-a">✓ Supported</span>
+            <span class="tag tag-a"><i data-lucide="check"></i> Supported</span>
           </div>
         </div>
         <div class="float-card fc-a">
-          <div class="fc-emoji">🛡</div>
+          <div class="fc-emoji"><i data-lucide="shield-check"></i></div>
           <div class="fc-label">Moderator Reply</div>
-          <div class="fc-text">"Perasaanmu valid. Kami ada untukmu 🌿"</div>
+          <div class="fc-text">"Perasaanmu valid. Kami ada untukmu."</div>
           <div class="fc-foot">
             <span class="tag tag-p">PIK-R Moderator</span>
           </div>
         </div>
         <div class="float-card fc-b">
-          <div class="fc-emoji">📊</div>
+          <div class="fc-emoji"><i data-lucide="chart-column"></i></div>
           <div class="fc-label">Komunitas Hari Ini</div>
-          <div class="fc-text">127 siswa sudah check-in 💙</div>
+          <div class="fc-text">127 siswa sudah check-in</div>
           <div class="fc-foot">
             <span style="font-size:11px">Update tiap jam</span>
           </div>
@@ -606,19 +692,19 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
             to /api/checkin. Never store PII — use anonymous session IDs.
           -->
           <button class="mood-btn" onclick="selectMood(this,'sangat-baik')" aria-label="Sangat Baik">
-            <span class="me">🤩</span>Sangat Baik
+            <span class="me"><i data-lucide="sparkles"></i></span>Sangat Baik
           </button>
           <button class="mood-btn" onclick="selectMood(this,'baik')" aria-label="Baik">
-            <span class="me">😊</span>Baik
+            <span class="me"><i data-lucide="smile"></i></span>Baik
           </button>
           <button class="mood-btn" onclick="selectMood(this,'biasa')" aria-label="Biasa Saja">
-            <span class="me">😐</span>Biasa Saja
+            <span class="me"><i data-lucide="meh"></i></span>Biasa Saja
           </button>
           <button class="mood-btn" onclick="selectMood(this,'buruk')" aria-label="Kurang Baik">
-            <span class="me">😔</span>Kurang Baik
+            <span class="me"><i data-lucide="frown"></i></span>Kurang Baik
           </button>
           <button class="mood-btn" onclick="selectMood(this,'sangat-buruk')" aria-label="Sangat Buruk">
-            <span class="me">😢</span>Sangat Buruk
+            <span class="me"><i data-lucide="cloud-rain"></i></span>Sangat Buruk
           </button>
         </div>
 
@@ -629,7 +715,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
         </div>
 
         <button class="btn btn-p" style="width:100%" onclick="submitCheckin()" id="checkin-btn">
-          ✓ Simpan Check-In Hari Ini
+          <i data-lucide="check"></i> Simpan Check-In Hari Ini
         </button>
         <p style="font-size:12px;color:var(--muted);margin-top:10px;text-align:center">
           Check-in-mu bersifat pribadi dan tidak akan dibagikan tanpa izin.
@@ -667,9 +753,10 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
     <div class="anon-grid">
       <!-- Story form -->
       <div class="anon-form-card rev d1">
-        <h3>Bagikan Ceritamu 💬</h3>
+        <h3>Bagikan Ceritamu <i data-lucide="message-circle"></i></h3>
         <p>Semua cerita akan dibaca oleh moderator PIK-R yang terlatih.</p>
 
+        <form id="story-form" onsubmit="submitStory(event)">
         <div class="fg">
           <label class="fl">Topik Ceritamu</label>
           <div class="cat-grid" role="radiogroup" aria-label="Pilih topik">
@@ -701,7 +788,7 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
         </div>
 
         <div class="fg">
-          <label class="fl" for="story-text">Ceritamu <span style="color:var(--d)">*</span></label>
+          <label class="fl" for="story-text">Ceritamu <span style="color:var(--rose)">*</span></label>
           <textarea class="fta" id="story-text" rows="5"
             placeholder="Tulis apa yang kamu rasakan... tidak ada aturan, tidak ada penilaian. Mulai saja."
             ></textarea>
@@ -724,7 +811,6 @@ footer{background:var(--ink);color:rgba(255,255,255,.8)}
           </p>
         </div>
 
-        <form onsubmit="submitStory(event)">
         <div class="priv-note">
           <span class="pi"><i data-lucide="shield-check"> </i></span>
           <span>Ceritamu <strong>100% anonim</strong>. Nama, sekolah, atau identitas apapun tidak diperlukan. Moderator hanya dapat membaca konten cerita, bukan siapa yang menulis.</span>
@@ -782,10 +868,10 @@ Butuh Bantuan Segera?</h4>
             → Log as high-priority in admin dashboard
           -->
           <div class="crisis-num">
-            📞 <span>Into The Light Indonesia: 119 ext 8</span>
+            <i data-lucide="phone"></i> <span>Into The Light Indonesia: 119 ext 8</span>
           </div>
           <div class="crisis-num" style="margin-top:8px">
-            💬 <span>Yayasan Pulih: (021) 788-42580</span>
+            <i data-lucide="message-circle"></i> <span>Yayasan Pulih: (021) 788-42580</span>
           </div>
         </div>
       </div>
@@ -818,7 +904,7 @@ Butuh Bantuan Segera?</h4>
         <!-- Anonymous story -->
         <div class="story-bubble">
           <div class="sb-head">
-            <div class="sb-av" style="background:#F1F5F9;font-size:20px">🌧</div>
+            <div class="sb-av" style="background:#F1F5F9"><i data-lucide="cloud-rain"></i></div>
             <div class="sb-meta">
               <div class="name">Anonim · Siswa SMA</div>
               <div class="time">2 hari yang lalu · Topik: Tekanan Belajar</div>
@@ -834,7 +920,7 @@ Butuh Bantuan Segera?</h4>
           <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
             <span class="tag tag-v">Tekanan Belajar</span>
             <span class="tag tag-r">Keluarga</span>
-            <span style="font-size:12px;color:var(--muted);margin-left:auto;align-self:center">👁 243 dibaca</span>
+            <span style="font-size:12px;color:var(--muted);margin-left:auto;align-self:center;display:flex;align-items:center;gap:4px"><i data-lucide="eye"></i> 243 dibaca</span>
           </div>
         </div>
 
@@ -846,7 +932,7 @@ Butuh Bantuan Segera?</h4>
             <div class="sb-av" style="color:#fff;font-size:14px;font-weight:800">MR</div>
             <div class="sb-meta">
               <div class="name" style="color:var(--pri)">Moderator Rina · PIK-R</div>
-              <div class="time">1 hari yang lalu · Terverifikasi ✓</div>
+              <div class="time">1 hari yang lalu · Terverifikasi <i data-lucide="badge-check"></i></div>
             </div>
             <span class="tag tag-p" style="margin-left:auto">Respons Resmi</span>
           </div>
@@ -860,20 +946,20 @@ Butuh Bantuan Segera?</h4>
             <br/><br/>
             Aku sangat senang kamu mau cerita di sini. Kalau kamu mau bicara lebih lanjut atau
             butuh seseorang yang mendengarkan secara langsung, moderator kami selalu siap.
-            Kamu tidak harus menanggung ini sendirian. 🌿
+            Kamu tidak harus menanggung ini sendirian.
           </p>
           <div class="resources-inline">
-            📚 <strong>Bacaan yang mungkin membantu:</strong>
+            <i data-lucide="book-open"></i> <strong>Bacaan yang mungkin membantu:</strong>
             Cara Menghadapi Tekanan Akademis · Komunikasi dengan Orang Tua ·
             <a href="#resources" style="color:var(--pri);font-weight:700">Lihat semua →</a>
           </div>
-          <div class="mod-tag">🛡 Moderator Terverifikasi PIK-R</div>
+          <div class="mod-tag"><i data-lucide="shield-check"></i> Moderator Terverifikasi PIK-R</div>
         </div>
       </div>
 
       <!-- See more button -->
       <div style="text-align:center;margin-top:36px" class="rev d2">
-        <button class="btn btn-g" onclick="showToast('Fitur ini akan hadir segera!','💙','info')">
+        <button class="btn btn-g" onclick="showToast('Fitur ini akan hadir segera!','heart','in')">
           Lihat Lebih Banyak Cerita →
         </button>
         <p style="font-size:12px;color:var(--muted);margin-top:12px">
@@ -901,25 +987,25 @@ Butuh Bantuan Segera?</h4>
 
     <div class="stats-grid">
       <div class="stat-c rev">
-        <div class="stat-ic">💬</div>
+        <div class="stat-ic"><i data-lucide="message-circle"></i></div>
         <div class="stat-n" data-target="1247">0</div>
         <div class="stat-l">Cerita Dibagikan</div>
         <span class="stat-tr">↑ 18% bulan ini</span>
       </div>
       <div class="stat-c rev d1">
-        <div class="stat-ic">🤝</div>
+        <div class="stat-ic"><i data-lucide="handshake"></i></div>
         <div class="stat-n" data-target="892">0</div>
         <div class="stat-l">Siswa Didukung</div>
         <span class="stat-tr">↑ 24% bulan ini</span>
       </div>
       <div class="stat-c rev d2">
-        <div class="stat-ic">🛡</div>
+        <div class="stat-ic"><i data-lucide="shield-check"></i></div>
         <div class="stat-n" data-target="14">0</div>
         <div class="stat-l">Moderator Aktif</div>
         <span class="stat-tr">Terlatih PIK-R</span>
       </div>
       <div class="stat-c rev d3">
-        <div class="stat-ic">⭐</div>
+        <div class="stat-ic"><i data-lucide="star"></i></div>
         <div class="stat-n" data-target="98">0</div>
         <div class="stat-l">% Merasa Terbantu</div>
         <span class="stat-tr">Dari survei pengguna</span>
@@ -942,7 +1028,7 @@ Butuh Bantuan Segera?</h4>
           Artikel dan panduan yang dipilih oleh moderator PIK-R untuk membantu kamu tumbuh.
         </p>
       </div>
-      <button class="btn btn-g rev d1" onclick="showToast('Lihat semua sumber daya segera hadir!','📚','info')">
+      <button class="btn btn-g rev d1" onclick="showToast('Lihat semua sumber daya segera hadir!','book-open','in')">
         Lihat Semua →
       </button>
     </div>
@@ -967,15 +1053,15 @@ Butuh Bantuan Segera?</h4>
   <div class="wrap">
     <div class="ft-top">
       <div class="ft-brand">
-        <div class="brand-mk" aria-hidden="true">🌿</div>
+        <div class="brand-mk" aria-hidden="true"><i data-lucide="leaf"></i></div>
         <div class="bn">MindFull</div>
         <div class="bt">"Ruang aman untuk tumbuh, merasa, dan dipahami."</div>
         <div class="socials" aria-label="Social media">
           <!-- FUTURE: Replace # with real platform links -->
-          <a href="#" class="soc" aria-label="Instagram">📸</a>
-          <a href="#" class="soc" aria-label="TikTok">🎵</a>
-          <a href="#" class="soc" aria-label="YouTube">▶️</a>
-          <a href="#" class="soc" aria-label="WhatsApp">💬</a>
+          <a href="#" class="soc" aria-label="Instagram"><i data-lucide="instagram"></i></a>
+          <a href="#" class="soc" aria-label="TikTok"><i data-lucide="music"></i></a>
+          <a href="#" class="soc" aria-label="YouTube"><i data-lucide="youtube"></i></a>
+          <a href="#" class="soc" aria-label="WhatsApp"><i data-lucide="message-circle"></i></a>
         </div>
       </div>
       <div class="ft-col">
@@ -1008,67 +1094,72 @@ Butuh Bantuan Segera?</h4>
     </div>
     <div class="ft-bottom">
       <span>© 2025 MindFull · PIK-R SMA Negeri 4 Purwokerto</span>
-      <span>Dibuat dengan 💙 untuk kesehatan mental remaja Indonesia</span>
+      <span>Dibuat dengan <span class="ic-heart"><i data-lucide="heart"></i></span> untuk kesehatan mental remaja Indonesia</span>
     </div>
   </div>
   <div class="hotline-strip">
-    🆘 Jika kamu dalam krisis, hubungi <span>Into The Light Indonesia: 119 ext 8</span> — tersedia 24 jam
+    <i data-lucide="siren"></i> Jika kamu dalam krisis, hubungi <span>Into The Light Indonesia: 119 ext 8</span> — tersedia 24 jam
   </div>
 </footer>
 
 <!-- Back to top -->
-<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">↑</button>
+<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top"><i data-lucide="chevron-up"></i></button>
 <!-- Toast container -->
 <div id="toast-root" aria-live="polite" aria-atomic="false"></div>
 
-
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
 'use strict';
+
+function refreshIcons(root) {
+  if (window.lucide) lucide.createIcons({ root: root || document });
+}
+
 /* ═══════════════════════════════════════════
    MOCK DATA
    Replace with fetch() calls to your API.
 ═══════════════════════════════════════════ */
 const MOOD_STATS = [
-  { emoji:'🤩', label:'Sangat Baik', pct:18, color:'#22C55E' },
-  { emoji:'😊', label:'Baik',        pct:34, color:'#06B6D4' },
-  { emoji:'😐', label:'Biasa Saja',  pct:28, color:'#F59E0B' },
-  { emoji:'😔', label:'Kurang Baik', pct:14, color:'#FB7185' },
-  { emoji:'😢', label:'Sangat Buruk',pct:6,  color:'#A78BFA' },
+  { icon:'sparkles', label:'Sangat Baik', pct:18, color:'#22C55E' },
+  { icon:'smile',    label:'Baik',        pct:34, color:'#06B6D4' },
+  { icon:'meh',      label:'Biasa Saja',  pct:28, color:'#F59E0B' },
+  { icon:'frown',    label:'Kurang Baik', pct:14, color:'#FB7185' },
+  { icon:'cloud-rain', label:'Sangat Buruk', pct:6, color:'#A78BFA' },
 ];
 
 const RESOURCES = [
   {
-    emoji:'🧠', bg:'linear-gradient(135deg,#EDE9FE,#C4B5FD)', cat:'Kesehatan Mental', catClass:'tag-v',
+    icon:'brain', bg:'linear-gradient(135deg,#EDE9FE,#C4B5FD)', cat:'Kesehatan Mental', catClass:'tag-v',
     title:'Mengenali Tanda-Tanda Anxiety pada Remaja',
     desc:'Kecemasan bisa datang diam-diam. Pelajari cara mengenali gejalanya dan langkah pertama yang bisa diambil.',
     time:'5 menit baca', helpful:89,
   },
   {
-    emoji:'💪', bg:'linear-gradient(135deg,#DCFCE7,#86EFAC)', cat:'Ketahanan Diri', catClass:'tag-a',
+    icon:'dumbbell', bg:'linear-gradient(135deg,#DCFCE7,#86EFAC)', cat:'Ketahanan Diri', catClass:'tag-a',
     title:'7 Cara Membangun Resiliensi Mental yang Terbukti Efektif',
     desc:'Resiliensi bukan berarti tidak merasa sakit — tapi bangkit setelah terjatuh. Panduan praktis untuk remaja.',
     time:'8 menit baca', helpful:94,
   },
   {
-    emoji:'🔮', bg:'linear-gradient(135deg,#CFFAFE,#A5F3FC)', cat:'Perencanaan Masa Depan', catClass:'tag-s',
+    icon:'compass', bg:'linear-gradient(135deg,#CFFAFE,#A5F3FC)', cat:'Perencanaan Masa Depan', catClass:'tag-s',
     title:'Cara Menghadapi Tekanan Memilih Jurusan Kuliah',
     desc:'Takut salah pilih? Kamu tidak harus tahu segalanya sekarang. Panduan navigasi keputusan besar ini.',
     time:'6 menit baca', helpful:87,
   },
   {
-    emoji:'💬', bg:'linear-gradient(135deg,#FEE2E2,#FCA5A5)', cat:'Hubungan', catClass:'tag-r',
+    icon:'messages-square', bg:'linear-gradient(135deg,#FEE2E2,#FCA5A5)', cat:'Hubungan', catClass:'tag-r',
     title:'Cara Berkomunikasi dengan Orang Tua Tentang Tekanan Sekolah',
     desc:'Merasa tidak didengar oleh orang tua? Panduan komunikasi asertif yang bisa kamu coba mulai hari ini.',
     time:'4 menit baca', helpful:91,
   },
   {
-    emoji:'🌙', bg:'linear-gradient(135deg,#FEF3C7,#FDE68A)', cat:'Kesehatan Mental', catClass:'tag-v',
+    icon:'moon', bg:'linear-gradient(135deg,#FEF3C7,#FDE68A)', cat:'Kesehatan Mental', catClass:'tag-v',
     title:'Mengapa Tidur yang Cukup adalah Self-Care Terpenting',
     desc:'Kurang tidur bukan hal sepele. Ketahui bagaimana tidur mempengaruhi emosi, memori, dan kesehatanmu.',
     time:'3 menit baca', helpful:96,
   },
   {
-    emoji:'🌱', bg:'linear-gradient(135deg,#F0FDF4,#BBF7D0)', cat:'Pertumbuhan Diri', catClass:'tag-a',
+    icon:'sprout', bg:'linear-gradient(135deg,#F0FDF4,#BBF7D0)', cat:'Pertumbuhan Diri', catClass:'tag-a',
     title:'Journaling untuk Pemula: Cara Melepaskan Beban Pikiran',
     desc:'Menulis di jurnal bisa menjadi terapi yang powerful. Mulai dengan 5 menit sehari dan rasakan bedanya.',
     time:'4 menit baca', helpful:92,
@@ -1088,24 +1179,6 @@ const ro = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.rev').forEach(el => ro.observe(el));
 
-function playLogoSound() {
-  const logo = document.querySelector(".mobile-brand .logo-mk");
-
-  // Reset animasi supaya bisa dipicu lagi
-  logo.classList.remove("bounce");
-
-  // Paksa browser reflow
-  void logo.offsetWidth;
-
-  // Jalankan lagi animasinya
-  logo.classList.add("bounce");
-}
-
-const mobileBrand = document.querySelector(".mobile-brand");
-
-if (mobileBrand) {
-  mobileBrand.addEventListener("click", playLogoSound);
-}
 /* ═══════════════════════════════════════════
    NAV scroll state + hamburger
 ═══════════════════════════════════════════ */
@@ -1133,13 +1206,14 @@ function closeMenu() {
    TOAST
    showToast(msg, icon, type)  type: ok|er|in
 ═══════════════════════════════════════════ */
-function showToast(msg, icon='✓', type='ok') {
+function showToast(msg, icon='check', type='ok') {
   const root = document.getElementById('toast-root');
   const t = document.createElement('div');
   t.className = `tn tn-${type}`;
-  t.innerHTML = `<span style="font-size:18px">${icon}</span><span>${msg}</span>
-    <button class="tn-close" onclick="this.parentElement.remove()">✕</button>`;
+  t.innerHTML = `<span class="tn-ic"><i data-lucide="${icon}"></i></span><span>${msg}</span>
+    <button class="tn-close" aria-label="Tutup" onclick="this.parentElement.remove()"><i data-lucide="x"></i></button>`;
   root.appendChild(t);
+  refreshIcons(t);
   requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
   setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 450); }, 4000);
 }
@@ -1159,7 +1233,7 @@ function renderMoodBars() {
   const c = document.getElementById('mood-bars');
   c.innerHTML = MOOD_STATS.map(m => `
     <div class="mbar-row">
-      <span class="mbar-em">${m.emoji}</span>
+      <span class="mbar-em"><i data-lucide="${m.icon}"></i></span>
       <div class="mbar-wrap">
         <div class="mbar-head">
           <span>${m.label}</span><span>${m.pct}%</span>
@@ -1169,6 +1243,7 @@ function renderMoodBars() {
         </div>
       </div>
     </div>`).join('');
+  refreshIcons(c);
 }
 /* Animate bars when section scrolls into view */
 const barObs = new IntersectionObserver(entries => {
@@ -1197,7 +1272,7 @@ function selectMood(btn, mood) {
   noteWrap.style.animation = 'fadeSlide .35s ease';
   /* Show crisis resources if mood is very bad */
   if (mood === 'sangat-buruk') {
-    showToast('Kami di sini untukmu 💙 Jika butuh bantuan segera, hubungi 119 ext 8', '🤝', 'in');
+    showToast('Kami di sini untukmu. Jika butuh bantuan segera, hubungi 119 ext 8', 'handshake', 'in');
   }
 }
 
@@ -1207,17 +1282,18 @@ function selectMood(btn, mood) {
 ═══════════════════════════════════════════ */
 function submitCheckin() {
   if (!selectedMood) {
-    showToast('Pilih mood-mu dulu ya!', '⚠️', 'er');
+    showToast('Pilih mood-mu dulu ya!', 'triangle-alert', 'er');
     return;
   }
   const moodLabels = {
-    'sangat-baik':'Sangat Baik 🤩','baik':'Baik 😊',
-    'biasa':'Biasa Saja 😐','buruk':'Kurang Baik 😔','sangat-buruk':'Sangat Buruk 😢',
+    'sangat-baik':'Sangat Baik','baik':'Baik',
+    'biasa':'Biasa Saja','buruk':'Kurang Baik','sangat-buruk':'Sangat Buruk',
   };
-  showToast(`Check-in tersimpan: ${moodLabels[selectedMood]}. Terima kasih sudah jujur! 💙`, '✓', 'ok');
+  showToast(`Check-in tersimpan: ${moodLabels[selectedMood]}. Terima kasih sudah jujur!`, 'check', 'ok');
   /* Disable submit to prevent double-submit */
   const btn = document.getElementById('checkin-btn');
-  btn.textContent = '✓ Check-In Tersimpan!';
+  btn.innerHTML = '<i data-lucide="check"></i> Check-In Tersimpan!';
+  refreshIcons(btn);
   btn.disabled = true;
   btn.style.opacity = '.7';
 }
@@ -1232,22 +1308,19 @@ function submitCheckin() {
 ═══════════════════════════════════════════ */
 const CRISIS_WORDS = ['bunuh','mati','sakit sekali','hilang','menyakiti diri','putus asa','tidak mau hidup'];
 function submitStory(e) {
-e.preventDefault(); 
+  e.preventDefault();
   const text = document.getElementById('story-text').value.trim();
   const cat  = document.querySelector('input[name="story-cat"]:checked');
-  if (!cat)  { showToast('Pilih topik ceritamu!', '⚠️', 'er'); return; }
-  if (text.length < 20) { showToast('Ceritamu terlalu singkat — tulis lebih banyak ya!', '⚠️', 'er'); return; }
+  if (!cat)  { showToast('Pilih topik ceritamu!', 'triangle-alert', 'er'); return; }
+  if (text.length < 20) { showToast('Ceritamu terlalu singkat — tulis lebih banyak ya!', 'triangle-alert', 'er'); return; }
   /* Client-side crisis keyword detection */
   const isCrisis = CRISIS_WORDS.some(w => text.toLowerCase().includes(w));
   if (isCrisis) {
-    showToast('Ceritamu sudah kami terima. Moderator akan segera membalas. Ingat: 119 ext 8 tersedia 24 jam 💙', '🤝', 'in');
+    showToast('Ceritamu sudah kami terima. Moderator akan segera membalas. Ingat: 119 ext 8 tersedia 24 jam', 'handshake', 'in');
   } else {
-    showToast('Ceritamu berhasil dikirim secara anonim! Moderator akan membalasnya segera. 🌿', '💬', 'ok');
+    showToast('Ceritamu berhasil dikirim secara anonim! Moderator akan membalasnya segera.', 'leaf', 'ok');
   }
-  /* Reset form */
-  document.getElementById('story-text').value = '';
-  document.getElementById('story-email').value = '';
-  if (cat) cat.checked = false;
+  e.target.reset();
 }
 
 /* ═══════════════════════════════════════════
@@ -1275,19 +1348,29 @@ new IntersectionObserver(entries => {
 }, { threshold: 0.3 }).observe(document.getElementById('stats'));
 
 const logoClick = new Audio("click.mp3");
+logoClick.preload = "auto";
 
 function playLogoSound() {
+  const logo = document.querySelector(".mobile-brand .logo-mk");
+  if (logo) {
+    logo.classList.remove("bounce");
+    void logo.offsetWidth;
+    logo.classList.add("bounce");
+  }
   logoClick.currentTime = 0;
-  logoClick.play();
+  logoClick.play().catch(() => {});
 }
+
+const mobileBrand = document.querySelector(".mobile-brand");
+if (mobileBrand) mobileBrand.addEventListener("click", playLogoSound);
 
 /* ═══════════════════════════════════════════
    RENDER RESOURCES
 ═══════════════════════════════════════════ */
 function renderResources() {
   document.getElementById('res-grid').innerHTML = RESOURCES.map(r => `
-    <article class="res-card" onclick="showToast('Artikel segera hadir! 📚','📖','in')">
-      <div class="res-thumb" style="background:${r.bg}">${r.emoji}</div>
+    <article class="res-card" onclick="showToast('Artikel segera hadir!','book-open','in')">
+      <div class="res-thumb" style="background:${r.bg}"><i data-lucide="${r.icon}"></i></div>
       <div class="res-body">
         <div style="margin-bottom:10px">
           <span class="tag ${r.catClass}">${r.cat}</span>
@@ -1295,11 +1378,12 @@ function renderResources() {
         <div class="res-title">${r.title}</div>
         <p class="res-desc">${r.desc}</p>
         <div class="res-foot">
-          <span>📖 ${r.time}</span>
+          <span style="display:flex;align-items:center;gap:4px"><i data-lucide="book-open"></i> ${r.time}</span>
           <span class="res-read">Baca <span>→</span></span>
         </div>
       </div>
     </article>`).join('');
+  refreshIcons(document.getElementById('res-grid'));
   /* Stagger reveal for resource cards */
   document.querySelectorAll('.res-card').forEach((el, i) => {
     el.style.opacity = '0';
@@ -1324,217 +1408,36 @@ function renderResources() {
 document.addEventListener('DOMContentLoaded', () => {
   renderMoodBars();
   renderResources();
+  refreshIcons();
 });
-</script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<script>
-lucide.createIcons();
 </script>
 <div class="mobile-bottom-nav">
 
   <a href="#hero">
-    🏠
+    <i data-lucide="home"></i>
     <span>Home</span>
   </a>
 
   <a href="#checkin">
-    😊
+    <i data-lucide="smile"></i>
     <span>Mood</span>
   </a>
 
   <a href="#anon">
-    💬
+    <i data-lucide="message-circle"></i>
     <span>Curhat</span>
   </a>
 
   <a href="#modresp">
-    🛡️
+    <i data-lucide="shield-check"></i>
     <span>Support</span>
   </a>
 
   <a href="#resources">
-    📚
+    <i data-lucide="book-open"></i>
     <span>Resource</span>
   </a>
 
 </div>
 </body>
 </html>
-<style>
-  .logo-mk.bounce {
-  animation: logoBounce .35s ease;
-}
-
-@keyframes logoBounce {
-  0%   { transform: scale(1) rotate(0deg); }
-  50%  { transform: scale(1.15) rotate(-10deg); }
-  100% { transform: scale(1) rotate(0deg); }
-}
-
- .mobile-brand:hover .logo-mk,
-.mobile-brand:active .logo-mk {
-  transform: rotate(-10deg) scale(1.1);
-}
-
-  @media (max-width: 768px) {
-  .wrap {
-    padding: 0 16px;
-  }
-
-  section {
-    padding: 56px 0;
-  }
-
-  .h-inner {
-    grid-template-columns: 1fr;
-    gap: 40px;
-    text-align: center;
-  }
-
-  .h-cta {
-    justify-content: center;
-  }
-
-  .h-safe {
-    margin: 32px auto 0;
-  }
-
-  .h-vis {
-    height: 320px;
-    transform: scale(0.85);
-    transform-origin: top center;
-  }
-
-  .checkin-grid,
-  .anon-grid {
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
-
-  .anon-form-card,
-  .card-pad {
-    padding: 24px;
-  }
-
-  .cat-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 400px) {
-  .cat-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-
-  body {
-    padding-bottom: 80px;
-  }
-
-  .mobile-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-
-    height: 70px;
-
-    background: rgba(255,255,255,.95);
-    backdrop-filter: blur(12px);
-
-    border-top: 1px solid var(--border);
-
-    z-index: 9999;
-  }
-
-  .mobile-bottom-nav a {
-    text-decoration: none;
-    font-size: 13px;
-    color: var(--muted);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-  }
-
-}
-
-@media (max-width:768px){
-
-  #nav{
-    display:none;
-  }
-
-}
-
-.mobile-brand {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-brand {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--pri);
-  }
-
-  #nav {
-    display: none;
-  }
-
-  #hero {
-    padding-top: 32px;
-  }
-}
-
-.mobile-brand {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.mobile-brand .logo-mk {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: linear-gradient(135deg, var(--pri), var(--sec));
-  color: white;
-  font-size: 20px;
-}
-
-.mobile-brand {
-  display: none;
-}
-
-@media (max-width: 768px) {
-  .mobile-brand {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-
-    margin-bottom: 20px;
-
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--pri);
-  }
-}
-</style>
